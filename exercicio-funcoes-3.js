@@ -20,7 +20,7 @@ function formatarHoraEmAmPm(hora, minuto){
   if(horaConvertida === 'Insira uma hora válida' || minuto < 0 || minuto > 59){
     return 'Insira uma hora válida';
   }
-  let prefixo = hora > 12 ? 'P.M.' : 'A.M.'
+  let prefixo = hora >= 12 ? 'P.M.' : 'A.M.'
 
   return `${horaConvertida.toString().padStart(2, '0')}:${minuto.toString().padStart(2,'0')} ${prefixo}`;
 }
@@ -29,5 +29,7 @@ console.log(formatarHoraEmAmPm(23,59))
 console.log(formatarHoraEmAmPm(1,30))
 console.log(formatarHoraEmAmPm(22,22))
 console.log(formatarHoraEmAmPm(0,0))
+console.log(formatarHoraEmAmPm(12,22))
 console.log(formatarHoraEmAmPm(0,60)) // Erro
+
 
