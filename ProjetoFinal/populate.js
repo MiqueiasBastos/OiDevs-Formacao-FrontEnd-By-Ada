@@ -1,5 +1,5 @@
-import Usuario from "./class/Usuario.class.js";
 import Administrador from "./class/Administrador.class.js";
+import Usuario from "./class/Usuario.class.js";
 
 new Administrador("Administrador", "admin", "123456", "");
 new Usuario("Aline Pereira", "pereiraaline", "123456","pereiraaline");

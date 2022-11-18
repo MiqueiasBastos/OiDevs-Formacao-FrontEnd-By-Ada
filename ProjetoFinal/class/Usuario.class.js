@@ -5,7 +5,7 @@ class Usuario {
     #nomeCompleto;
     #nomeUsuario;
     #senha;
-    #listaAmigos;
+    #amigos;
     #usuarioGithub;
     #estaAutenticado;
 
@@ -17,19 +17,21 @@ class Usuario {
             ? true
             : false;
 
-        if(usuarioJaExiste) throw new Error('O usuário já existe!');
+        if (usuarioJaExiste) throw new Error("O usuário já existe!");
 
         this.#nomeCompleto = nomeCompleto;
         this.#nomeUsuario = nomeUsuario;
         this.#senha = md5(senha);
         this.#usuarioGithub = usuarioGithub;
         this.#estaAutenticado = false;
-        this.#listaAmigos = [];
+        this.#amigos = [];
 
         Usuario.listaUsuarios.push(this);
     }
+
     autenticar(nomeUsuario, senha) {
-        if (nomeUsuario !== this.#nomeUsuario || md5(senha) !== this.#senha) throw new Error('Usuário e/ou senha inválidos!')
+        const senhaHash = md5(senha);
+        if (nomeUsuario !== this.#nomeUsuario || senhaHash !== this.#senha) throw new Error("Usuário e/ou senha inválidos!");
         this.#estaAutenticado = true;
         return this;
     }
@@ -37,31 +39,40 @@ class Usuario {
         this.#estaAutenticado = false;
     }
     adicionarAmigo(usuario) {
-        if(!this.#estaAutenticado) throw new Error('Usuário não autorizado.');
-        this.#listaAmigos.push(usuario)
+        this.#amigos.push(usuario);
     }
     removerAmigo(usuario) {
-        if(!this.#estaAutenticado) throw new Error('Usuário não autorizado.');
-        const indexUsuario = this.#listaAmigos.indexOf(usuario);
+        const indexUsuario = this.#amigos.indexOf(usuario);
 
-        if(indexUsuario !== -1){
-            this.#listaAmigos.splice(indexUsuario, 1);
+        if (indexUsuario !== -1) {
+            this.#amigos.splice(indexUsuario, 1);
         }
     }
     criarPostagem(titulo, descricao) {
-        if(!this.#estaAutenticado) throw new Error('Usuário não autorizado.');
+        if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
         new Postagem(titulo, descricao, this);
     }
     comentarPostagem(postagem, comentario) {
-        if(!this.#estaAutenticado) throw new Error('Usuário não autorizado.');
+        if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
         postagem.adicionarComentario(comentario, this);
     }
-
-    ehAmigo (usuario) {
-        return this.#listaAmigos.findIndex(amigo => amigo === usuario) !== -1;
+    ehAmigo(usuario) {
+        return this.#amigos.findIndex((amigo) => amigo === usuario) !== -1;
     }
-    
-    static listaUsuarios = [];
+    renderizarItemAmigo(especial = ''){
+        const inicio = especial !== 'primeiro' && especial !== 'unico';
+        const final = especial !== 'ultimo' && especial !== 'unico';
+
+        return `
+            <li class="d-flex justify-content-between align-items-center ${inicio && 'mt-3'} ${final && 'border-bottom pb-3'}">
+                <div class="d-flex align-items-center">
+                    <img src="${this.imagemPerfil}" class="rounded-circle me-3" height="50" width="50" alt="">
+                    <h6>${this.nomeCompleto}</h6>
+                </div>
+                <button type="button" class="btn btn-outline-danger" onclick="removerAmigo('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Remover</button>
+            </li>
+        `;
+    }
 
     get nomeUsuario() {
         return this.#nomeUsuario;
@@ -72,26 +83,37 @@ class Usuario {
     get estaAutenticado() {
         return this.#estaAutenticado;
     }
-    get usuarioGithub(){
-        return this.#usuarioGithub
+    get usuarioGithub() {
+        return this.#usuarioGithub;
+    }
+    get amigos() {
+        return this.#amigos;
+    }
+    get imagemPerfil() {
+        const imagem =
+            this.usuarioGithub !== ""
+                ? `https://github.com/${this.usuarioGithub}.png`
+                : "./assets/usuario-padrao.jpg";
+        return imagem;
     }
 
-    get listaAmigos() {
-        return this.#listaAmigos;
-    }
+    static listaUsuarios = [];
 
     static login(nomeUsuario, senha) {
-        let indiceUsuario = Usuario.listaUsuarios.findIndex((usuario)=>{
+        let indiceUsuario = Usuario.listaUsuarios.findIndex((usuario) => {
             return usuario.nomeUsuario === nomeUsuario;
-        })
-        if(indiceUsuario === -1) throw new Error('Usuário e/ou senha inválidos.')
+        });
 
-        try {
-                return Usuario.listaUsuarios[indiceUsuario].autenticar(nomeUsuario, senha);
-        }
-        catch(error){
-            console.log(error);
-        }
+        if (indiceUsuario === -1) throw new Error("Usuário e/ou senha inválidos.");
+        return Usuario.listaUsuarios[indiceUsuario].autenticar(nomeUsuario, senha);
+    }
+    static buscarUsuario(nomeUsuario) {
+        let indiceUsuario = Usuario.listaUsuarios.findIndex((usuario) => {
+            return usuario.nomeUsuario === nomeUsuario;
+        });
+
+        if (indiceUsuario === -1) throw new Error("Usuário não encontrado");
+        return Usuario.listaUsuarios[indiceUsuario]
     }
 }
 

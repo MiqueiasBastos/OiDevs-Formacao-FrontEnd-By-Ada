@@ -17,4 +17,4 @@ class Comentario {
     }
 }
 
-export default Comentario
+export default Comentario;
