@@ -105,19 +105,14 @@ function renderizarPaginaFeed() {
     mudarTela('feed');
 
     const postagens = Postagem.listaPostagens
-              .map((postagem) => {
+              .map((postagem, idPostagem) => {
                 if(usuarioSessao === postagem.autor || usuarioSessao.ehAmigo(postagem.autor)) {
-                    return postagem.renderizar(usuarioSessao)
+                    return postagem.renderizar(idPostagem, usuarioSessao)
                 }
                 return;
             }).join("");
             
     document.querySelector("#postagens").innerHTML = postagens !== '' ? postagens : '<div class="w-100 d-flex flex-grow-1 justify-content-center align-items-center">Nenhuma postagem, adicione amigos e veja aqui as atualizações</div>';
-
-    const botoesNovoComentario = document.querySelectorAll(
-        ".btn-novo-comentario"
-    );
-    // console.log(botoesNovoComentario);
 }
 
 function adicionarAmigo(nomeUsuario){
@@ -201,6 +196,27 @@ function mudarTela(tela){
             break;
     }
 }
+
+const modalEditarPostagem = document.querySelector("#modal-editar-postagem")
+modalEditarPostagem.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget
+    const idPostagem = button.getAttribute('data-bs-id');
+
+    const postagem = Postagem.localizarPorId(idPostagem);
+
+    const inputTexto = modalEditarPostagem.querySelector('.modal-body input');
+    const botaoSalvar = modalEditarPostagem.querySelector('.modal-body button');
+
+    inputTexto.value = postagem.descricao
+    
+    botaoSalvar.onclick = function(e) {
+        e.preventDefault();
+        postagem.modificarDescricao(inputTexto.value);
+        const modal = bootstrap.Modal.getInstance(modalEditarPostagem);
+        modal.hide()
+        renderizarPaginaFeed();
+    }
+})
 
 window.adicionarAmigo = adicionarAmigo;
 window.removerAmigo = removerAmigo;

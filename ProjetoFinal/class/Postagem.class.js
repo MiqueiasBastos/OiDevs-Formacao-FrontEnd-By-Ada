@@ -30,7 +30,7 @@ class Postagem {
     adicionarComentario(descricao, usuario) {
         this.#comentarios.push(new Comentario(descricao, usuario));
     }
-    renderizar(usuarioSessao) {
+    renderizar(idPostagem, usuarioSessao) {
         return `
             <div class="card w-100 mt-3 shadow-sm">
                 <div class="card-body">
@@ -42,9 +42,13 @@ class Postagem {
                                 <span class="text-muted fst-italic">${this.dataFormatada}</span>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-light bg-white border-0">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
+                        ${
+                            usuarioSessao === this.#autor
+                                ? `<button type="button" class="btn btn-light bg-white border-0" data-bs-toggle="modal" data-bs-target="#modal-editar-postagem" data-bs-id="${idPostagem}">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>`
+                                : ''
+                            }
                     </div>
                     <p class="card-text">${this.#descricao}</p>
                     <hr>
@@ -83,6 +87,10 @@ class Postagem {
     }
 
     static listaPostagens = [];
+
+    static localizarPorId (id) {
+        return Postagem.listaPostagens[id];
+    }
 }
 
 export default Postagem;
