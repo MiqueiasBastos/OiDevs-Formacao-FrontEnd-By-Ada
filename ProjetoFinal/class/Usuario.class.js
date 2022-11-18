@@ -1,5 +1,6 @@
 import Postagem from "./Postagem.class.js";
 import md5 from "../libs/md5.js";
+import Administrador from "./Administrador.class.js";
 
 class Usuario {
     #nomeCompleto;
@@ -52,6 +53,15 @@ class Usuario {
         if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
         new Postagem(titulo, descricao, this);
     }
+    apagarPostagem(postagem) {
+        if (!this.#estaAutenticado || !(this instanceof Administrador)) throw new Error("Usuário não autorizado.");
+
+        const indexPostagem = Postagem.listaPostagens.indexOf(postagem);
+
+        if (indexPostagem !== -1) {
+           Postagem.listaPostagens.splice(indexPostagem, 1);
+        }
+    }
     comentarPostagem(postagem, comentario) {
         if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
         postagem.adicionarComentario(comentario, this);
@@ -70,6 +80,34 @@ class Usuario {
                     <h6>${this.nomeCompleto}</h6>
                 </div>
                 <button type="button" class="btn btn-outline-danger" onclick="removerAmigo('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Remover</button>
+            </li>
+        `;
+    }
+    renderizarItemUsuario(especial = '', usuarioSessao, ehAdministrador, ehAmigo){
+        const inicio = especial !== 'primeiro' && especial !== 'unico';
+        const final = especial !== 'ultimo' && especial !== 'unico';
+
+        return `
+            <li class="d-flex justify-content-between align-items-center ${inicio && 'mt-3'} ${final && 'border-bottom pb-3'}">
+                <div class="d-flex align-items-center">
+                    <img src="${this.imagemPerfil}" class="rounded-circle me-3"
+                        height="50" width="50" alt="">
+                    <h6>${this.#nomeCompleto}</h6>
+                </div>
+                <div>
+                    ${
+                        usuarioSessao !== this
+                            ? ehAmigo
+                                ? `<button type="button" class="btn btn-outline-success" onclick="removerAmigo('${this.#nomeUsuario}')"><i class="bi bi-person-check-fill"></i> Amigo</button>`
+                                : `<button type="button" class="btn btn-success" onclick="adicionarAmigo('${this.#nomeUsuario}')"><i class="bi bi-person-plus-fill"></i> Adicionar</button>`
+                            : ''
+                        }
+                    ${
+                        usuarioSessao !== this
+                            ? ehAdministrador ? `<button type="button" class="btn btn-outline-danger" onclick="removerUsuario('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Excluir</button>` : ''
+                            : ''
+                }
+                </div>
             </li>
         `;
     }

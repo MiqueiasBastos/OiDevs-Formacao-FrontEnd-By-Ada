@@ -42,13 +42,9 @@ class Postagem {
                                 <span class="text-muted fst-italic">${this.dataFormatada}</span>
                             </div>
                         </div>
-                        ${
-                            this.#autor !== usuarioSessao
-                                ? usuarioSessao.ehAmigo(this.#autor)
-                                    ? `<button class="btn btn-outline-success"><i class="bi bi-check2 d-none d-sm-inline"></i> Amigo</button>`
-                                    : `<button class="btn btn-success" onclick="adicionarAmigo('${this.#autor.nomeUsuario}')"><i class="bi bi-plus-lg d-none d-sm-inline"></i> Adicionar</button>`
-                                : ""
-                        }
+                        <button type="button" class="btn btn-light bg-white border-0">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
                     </div>
                     <p class="card-text">${this.#descricao}</p>
                     <hr>
@@ -81,6 +77,9 @@ class Postagem {
     }
     get timestamp() {
         return this.#timestamp;
+    }
+    get autor() {
+        return this.#autor
     }
 
     static listaPostagens = [];

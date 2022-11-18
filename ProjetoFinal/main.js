@@ -5,7 +5,7 @@ import "./populate.js";
 import { formCadastro, formLogin, formPostagem, telaFeed, telaLogin, modalCadastro, headerSaudacao, btnListaUsuarios } from "./elements.js";
 
 let usuarioSessao;
-let ehAdmistrador;
+let ehAdministrador;
 
 formLogin.onsubmit = function (event) {
     event.preventDefault();
@@ -15,8 +15,7 @@ formLogin.onsubmit = function (event) {
 
     try {
         usuarioSessao = Usuario.login(inputUsuario, inputSenha);
-        ehAdmistrador = usuarioSessao instanceof Administrador;
-
+        ehAdministrador = usuarioSessao instanceof Administrador;
         this.reset();
         renderizarPaginaFeed();
     } catch (error) {
@@ -48,7 +47,7 @@ formCadastro.onsubmit = function (event) {
     const usuarioGithub = form.get("usuario-github");
 
     usuarioSessao = new Usuario(nomeCompleto, usuario, senha, usuarioGithub);
-    ehAdmistrador = false;
+    ehAdministrador = false;
 
     const modal = bootstrap.Modal.getInstance(modalCadastro);    
     modal.hide();
@@ -59,23 +58,6 @@ formCadastro.onsubmit = function (event) {
 
 function renderizarPaginaFeed() {
     headerSaudacao.innerHTML = `Olá, ${usuarioSessao.nomeCompleto}`;
-    if(ehAdmistrador) {
-        btnListaUsuarios.classList.replace('d-none', 'd-block');
-    }
-    document.querySelector("#btn-sair").addEventListener("click", () => {
-        if(usuarioSessao !== undefined) {
-            usuarioSessao.desconectar();
-        }
-        usuarioSessao = undefined;
-        ehAdmistrador = false;
-        btnListaUsuarios.classList.replace('d-block', 'd-none')
-
-        telaLogin.classList.replace("d-none", "d-flex");
-        telaFeed.classList.replace("d-flex", "d-none");
-    });
-
-    const imagemPerfil =
-
     document.querySelector("#header-imagem-perfil").src = usuarioSessao.imagemPerfil;
     document.querySelector("#postagem-imagem-perfil").src = usuarioSessao.imagemPerfil;
 
@@ -96,40 +78,130 @@ function renderizarPaginaFeed() {
         return amigo.renderizarItemAmigo(especial)
     }).join('');
 
+    document.querySelector("#lista-usuarios").innerHTML = Usuario.listaUsuarios.map((usuario, index) => {
+        let especial;
+        if(Usuario.listaUsuarios.length === 1){
+            especial = 'unico';
+        }
+        else if(index === 0) {
+            especial = 'primeiro';
+        }
+        else if(index === Usuario.listaUsuarios.length - 1) {
+            especial = 'ultimo';
+        }
+        else {
+            especial = 'meio';
+        }
+        return usuario.renderizarItemUsuario(especial, usuarioSessao, ehAdministrador, usuarioSessao.ehAmigo(usuario))
+    }).join('');
+
     if(usuarioSessao.amigos.length === 0) {
         document.querySelector("#lista-amigos").innerHTML = '<li class="text-center p-3">Você ainda não tem ninguém na lista de amigos.</li>'
     }
 
     document.querySelector('#total-amigos').innerHTML = usuarioSessao.amigos.length;
+    document.querySelector('#total-usuarios').innerHTML = Usuario.listaUsuarios.length;
 
-    telaLogin.classList.replace("d-flex", "d-none");
-    telaFeed.classList.replace("d-none", "d-flex");
+    mudarTela('feed');
 
-    const temPostagem = Postagem.listaPostagens.length > 0;
-    document.querySelector("#postagens").innerHTML = temPostagem
-        ? Postagem.listaPostagens
-              .map((postagem) => postagem.renderizar(usuarioSessao))
-              .join("")
-        : '<div class="w-100 d-flex flex-grow-1 justify-content-center align-items-center">Nenhuma postagem</div>';
+    const postagens = Postagem.listaPostagens
+              .map((postagem) => {
+                if(usuarioSessao === postagem.autor || usuarioSessao.ehAmigo(postagem.autor)) {
+                    return postagem.renderizar(usuarioSessao)
+                }
+                return;
+            }).join("");
+            
+    document.querySelector("#postagens").innerHTML = postagens !== '' ? postagens : '<div class="w-100 d-flex flex-grow-1 justify-content-center align-items-center">Nenhuma postagem, adicione amigos e veja aqui as atualizações</div>';
 
     const botoesNovoComentario = document.querySelectorAll(
         ".btn-novo-comentario"
     );
-    console.log(botoesNovoComentario);
+    // console.log(botoesNovoComentario);
 }
 
-
 function adicionarAmigo(nomeUsuario){
-     try {
-        const amigo = Usuario.buscarUsuario(nomeUsuario)
+    try {
+        const amigo = Usuario.buscarUsuario(nomeUsuario);
         usuarioSessao.adicionarAmigo(amigo);
         amigo.adicionarAmigo(usuarioSessao);
         renderizarPaginaFeed();
+     }
+     catch(error){
+        console.log(error);
+    }
+}
 
+function removerAmigo(nomeUsuario){
+    try {
+        const amigo = Usuario.buscarUsuario(nomeUsuario);
+        usuarioSessao.removerAmigo(amigo);
+        amigo.removerAmigo(usuarioSessao);
+        renderizarPaginaFeed();
+     }
+     catch(error){
+        console.log(error);
+     }
+}
+function removerUsuario(nomeUsuario){
+    try {
+        const usuario = Usuario.buscarUsuario(nomeUsuario);
+        console.log(Usuario.listaUsuarios)
+
+        usuario.amigos.forEach(amigo=>{
+            amigo.removerAmigo(usuario);
+        })
+
+        Postagem.listaPostagens.forEach(postagem => {
+            if(postagem.autor === usuario){
+                usuarioSessao.apagarPostagem(postagem);
+                return;
+            }
+            postagem.comentarios.forEach(comentario => {
+                if(comentario.autor === usuario){
+                    postagem.apagarComentario(comentario);
+                    return;
+                }
+            })
+        });
+
+        if(ehAdministrador) {
+            usuarioSessao.excluirUsuario(usuario)
+        }
+        renderizarPaginaFeed();
      }
      catch(error){
         console.log(error);
      }
 }
 
+document.querySelector("#btn-sair").addEventListener("click", () => {
+    if(usuarioSessao !== undefined) {
+        usuarioSessao.desconectar();
+    }
+    usuarioSessao = undefined;
+    ehAdministrador = false;
+
+    mudarTela('login');
+});
+
+function mudarTela(tela){
+    telaLogin.classList.replace("d-flex", "d-none");
+    telaFeed.classList.replace("d-flex", "d-none");
+    
+    switch (tela) {
+        case 'login':
+            telaLogin.classList.replace("d-none", "d-flex");
+            break;
+        case 'feed':
+            telaFeed.classList.replace("d-none", "d-flex");
+            break;
+        default:
+            telaLogin.classList.replace("d-none", "d-flex");
+            break;
+    }
+}
+
 window.adicionarAmigo = adicionarAmigo;
+window.removerAmigo = removerAmigo;
+window.removerUsuario = removerUsuario;

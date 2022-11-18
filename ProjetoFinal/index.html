@@ -12,7 +12,7 @@
 
 <body class="bg-light">
     <div class="d-flex flex-column tela" id="tela-login">
-        <div class="modal fade" id="modal-cadastro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="modal-cadastro" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -61,10 +61,10 @@
                     <main class="form-signin w-100 shadow p-4 bg-white">
                         <form id="form-login">
                             <div class="input-group input-group-lg mb-2">
-                                <input type="text" name="usuario" placeholder="Usuário" class="form-control">
+                                <input type="text" name="usuario" placeholder="Usuário" class="form-control" value="miqueiasbastos">
                             </div>
                             <div class="input-group input-group-lg mb-3">
-                                <input type="password" name="senha" placeholder="Senha" class="form-control">
+                                <input type="password" name="senha" placeholder="Senha" class="form-control" value="123456">
                             </div>
                             <button class="w-100 btn btn-lg btn-success mb-3" type="submit">
                                 Entrar
@@ -87,12 +87,11 @@
     </div>
 
     <div class="d-none flex-column tela" id="tela-feed">
-        <div class="modal fade" id="modal-lista-amigos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modal-lista-amigos" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Meus amigos <span class="badge bg-success" id="total-amigos"></span></h1>
+                        <h1 class="modal-title fs-5">Meus amigos <span class="badge bg-success" id="total-amigos"></span></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -103,69 +102,15 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modal-usuarios" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modal-usuarios" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Todos os Usuários <span
-                                class="badge bg-success">6</span></h1>
+                        <h1 class="modal-title fs-5">Todos os Usuários <span class="badge bg-success" id="total-usuarios"></span></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <ul class="list-unstyled m-0">
-                            <li class="d-flex justify-content-between align-items-center border-bottom pb-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://www.reumatologia.org.br/site/wp-content/themes/sbr/images/icone-usuario.jpg"
-                                        class="rounded-circle me-3" height="50" width="50" alt="">
-                                    <h6>Administrador <i class="bi bi-shield-fill-check"></i></h6>
-                                </div>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center border-bottom pb-3 mt-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://github.com/pereiraaline.png" class="rounded-circle me-3"
-                                        height="50" width="50" alt="">
-                                    <h6>Aline Pereira</h6>
-                                </div>
-                                <button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>
-                                    Remover</button>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center border-bottom pb-3 mt-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://github.com/jady-sm-godoi.png" class="rounded-circle me-3"
-                                        height="50" width="50" alt="">
-                                    <h6>Jady Godoi</h6>
-                                </div>
-                                <button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>
-                                    Remover</button>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center border-bottom pb-3 mt-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://github.com/biondij.png" class="rounded-circle me-3" height="50"
-                                        width="50" alt="">
-                                    <h6>Julia Biondi</h6>
-                                </div>
-                                <button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>
-                                    Remover</button>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center border-bottom pb-3 mt-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://github.com/miqueiasbastos.png" class="rounded-circle me-3"
-                                        height="50" width="50" alt="">
-                                    <h6>Miquéias Bastos</h6>
-                                </div>
-                                <button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>
-                                    Remover</button>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center mt-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://github.com/paulaherbella.png" class="rounded-circle me-3"
-                                        height="50" width="50" alt="">
-                                    <h6>Paula Herbella</h6>
-                                </div>
-                                <button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>
-                                    Remover</button>
-                            </li>
+                        <ul class="list-unstyled m-0" id="lista-usuarios">
                         </ul>
                     </div>
                 </div>
@@ -179,8 +124,8 @@
                 <div class="text-white">
                     <p class="m-0 fw-bold" id="header-saudacao"></p>
                     <div class="d-flex">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-usuarios" class="btn btn-sm p-0 text-white me-2"><i class="bi bi-person-fill"></i> Usuários</button>
                         <button type="button" data-bs-toggle="modal" data-bs-target="#modal-lista-amigos" class="btn btn-sm p-0 text-white me-2"><i class="bi bi-people-fill"></i> Amigos</button>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-usuarios" class="btn btn-sm p-0 text-white me-2 d-none" id="btn-lista-usuarios"><i class="bi bi-person-fill"></i> Usuários</button>
                         <button type="button" id="btn-sair" class="btn btn-sm p-0 text-white"><i class="bi bi-box-arrow-right"></i> Sair</a>
                     </div>
                 </div>
