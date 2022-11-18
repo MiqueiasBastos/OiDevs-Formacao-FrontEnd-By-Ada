@@ -218,6 +218,24 @@ modalEditarPostagem.addEventListener('show.bs.modal', event => {
     }
 })
 
+function adicionarComentario (event) {
+    event.preventDefault();
+    const idPostagem = event.target.getAttribute('data-id');
+    const descricao = event.target.querySelector('input').value;
+    const postagem = Postagem.localizarPorId(idPostagem);
+    postagem.adicionarComentario(descricao, usuarioSessao);
+    renderizarPaginaFeed()
+}
+
+function apagarComentario (idPostagem, idComentario) {
+    const postagem = Postagem.localizarPorId(idPostagem);
+    const comentario = postagem.localizarComentarioPorId(idComentario);
+    postagem.apagarComentario(comentario);
+    renderizarPaginaFeed()
+}
+
 window.adicionarAmigo = adicionarAmigo;
 window.removerAmigo = removerAmigo;
 window.removerUsuario = removerUsuario;
+window.adicionarComentario = adicionarComentario;
+window.apagarComentario = apagarComentario;

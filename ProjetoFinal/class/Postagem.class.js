@@ -54,15 +54,21 @@ class Postagem {
                     <hr>
                     <h6 class="mb-3">Comentários (${this.#comentarios.length})</h6>
                     <ul class="list-unstyled">
-                        ${this.#comentarios.map((comentario) => comentario.renderizar()).join("")}
+                        ${this.#comentarios.map((comentario, idComentario) => comentario.renderizar(usuarioSessao, idPostagem, idComentario)).join("")}
                     </ul>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Digite seu comentário">
-                        <button class="btn btn-success btn-novo-comentario" type="button">Comentar</button>
-                    </div>
+                    <form onsubmit="adicionarComentario(event)" data-id="${idPostagem}">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Digite seu comentário">
+                            <button class="btn btn-success btn-novo-comentario" type="submit">Comentar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         `;
+    }
+
+    localizarComentarioPorId (id) {
+        return this.#comentarios[id];
     }
 
     get descricao() {
