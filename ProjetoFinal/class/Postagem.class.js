@@ -16,47 +16,75 @@ class Postagem {
     }
 
     apagarComentario(comentario) {
-        const indexComentario = this.#comentarios.indexOf(comentario);
-
-        if (indexComentario !== -1) {
-            this.#comentarios.splice(indexComentario, 1);
-        }
+        const indiceComentario = this.#comentarios.indexOf(comentario);
+        if (indiceComentario !== -1) this.#comentarios.splice(indiceComentario, 1);
     }
     modificarDescricao(descricao) {
-        if (typeof descricao !== "string")
-            throw new TypeError("Descrição inválida.");
+        if (typeof descricao !== "string") throw new TypeError("Descrição inválida.");
         this.#descricao = descricao;
     }
-    adicionarComentario(descricao, usuario) {
-        this.#comentarios.push(new Comentario(descricao, usuario));
+    adicionarComentario(descricao, autor) {
+        this.#comentarios.push(new Comentario(descricao, autor));
     }
-    renderizar(idPostagem, usuarioSessao) {
+    renderizar(indicePostagem, usuarioSessao) {
         return `
             <div class="card w-100 mt-3 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3 justify-content-between">
                         <div class="d-flex">
-                            <img src="${this.#autor.imagemPerfil}" class="rounded-circle me-3" height="45" alt="">
+                            <img src="${
+                                this.#autor.imagemPerfil
+                            }" class="rounded-circle me-3" height="45" alt="">
                             <div>
-                                <h6 class="card-title m-0">${this.#autor.nomeCompleto}</h6>
-                                <span class="text-muted fst-italic">${this.dataFormatada}</span>
+                                <h6 class="card-title m-0">${
+                                    this.#autor.nomeCompleto
+                                }</h6>
+                                <span class="text-muted fst-italic">${
+                                    this.dataFormatada
+                                }</span>
                             </div>
                         </div>
                         ${
                             usuarioSessao === this.#autor
-                                ? `<button type="button" class="btn btn-light bg-white border-0" data-bs-toggle="modal" data-bs-target="#modal-editar-postagem" data-bs-id="${idPostagem}">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </button>`
-                                : ''
-                            }
+                                ? `
+                                    <div class="dropdown">
+                                        <button class="btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu p-0">
+                                            <li class=" border-1 border-bottom">
+                                                <button type="button" class="btn btn-light w-100 border-1 rounded-0 rounded-top text-start" data-bs-toggle="modal" data-bs-target="#modal-editar-postagem" data-bs-id="${indicePostagem}">
+                                                    <i class="bi bi-pencil-fill"></i> Editar
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="btn btn-light w-100 border-0 rounded-0 rounded-bottom text-start" onclick="apagarPostagem('${indicePostagem}')">
+                                                    <i class="bi bi-trash3-fill"></i> Excluir
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                `
+                                : ""
+                        }
                     </div>
                     <p class="card-text">${this.#descricao}</p>
                     <hr>
-                    <h6 class="mb-3">Comentários (${this.#comentarios.length})</h6>
+                    <h6 class="mb-3">Comentários (${
+                        this.#comentarios.length
+                    })</h6>
                     <ul class="list-unstyled">
-                        ${this.#comentarios.map((comentario, idComentario) => comentario.renderizar(usuarioSessao, idPostagem, idComentario)).join("")}
+                        ${this.#comentarios
+                            .map((comentario, indiceComentario) =>
+                                comentario.renderizar(
+                                    usuarioSessao,
+                                    indicePostagem,
+                                    indiceComentario
+                                )
+                            )
+                            .join("")}
                     </ul>
-                    <form onsubmit="adicionarComentario(event)" data-id="${idPostagem}">
+                    <form onsubmit="adicionarComentario(event)" data-id="${indicePostagem}">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Digite seu comentário">
                             <button class="btn btn-success btn-novo-comentario" type="submit">Comentar</button>
@@ -66,9 +94,10 @@ class Postagem {
             </div>
         `;
     }
-
-    localizarComentarioPorId (id) {
-        return this.#comentarios[id];
+    localizarComentarioPorIndice(indice) {
+        const comentario = this.#comentarios[indice];
+        if (comentario === undefined) throw new Error("Comentário não encontrado.");
+        return comentario;
     }
 
     get descricao() {
@@ -89,13 +118,15 @@ class Postagem {
         return this.#timestamp;
     }
     get autor() {
-        return this.#autor
+        return this.#autor;
     }
 
     static listaPostagens = [];
 
-    static localizarPorId (id) {
-        return Postagem.listaPostagens[id];
+    static localizarPorIndice(indice) {
+        const postagem = Postagem.listaPostagens[indice];
+        if(postagem === undefined) throw new Error("Postagem não encontrada");
+        return Postagem.listaPostagens[indice];
     }
 }
 

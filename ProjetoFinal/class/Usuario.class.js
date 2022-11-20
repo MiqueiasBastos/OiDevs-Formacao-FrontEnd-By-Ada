@@ -1,14 +1,13 @@
 import Postagem from "./Postagem.class.js";
 import md5 from "../libs/md5.js";
-import Administrador from "./Administrador.class.js";
 
 class Usuario {
     #nomeCompleto;
     #nomeUsuario;
     #senha;
-    #amigos;
+    #amigos = [];
     #usuarioGithub;
-    #estaAutenticado;
+    #estaAutenticado = false;
 
     constructor(nomeCompleto, nomeUsuario, senha, usuarioGithub = "") {
         if (typeof nomeUsuario !== "string") throw new TypeError("Usuário inválido");
@@ -24,8 +23,6 @@ class Usuario {
         this.#nomeUsuario = nomeUsuario;
         this.#senha = md5(senha);
         this.#usuarioGithub = usuarioGithub;
-        this.#estaAutenticado = false;
-        this.#amigos = [];
 
         Usuario.listaUsuarios.push(this);
     }
@@ -43,24 +40,17 @@ class Usuario {
         this.#amigos.push(usuario);
     }
     removerAmigo(usuario) {
-        const indexUsuario = this.#amigos.indexOf(usuario);
-
-        if (indexUsuario !== -1) {
-            this.#amigos.splice(indexUsuario, 1);
-        }
+        const indiceUsuario = this.#amigos.indexOf(usuario);
+        if (indiceUsuario !== -1) this.#amigos.splice(indiceUsuario, 1);
     }
     criarPostagem(titulo, descricao) {
         if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
         new Postagem(titulo, descricao, this);
     }
     apagarPostagem(postagem) {
-        if (!this.#estaAutenticado || !(this instanceof Administrador)) throw new Error("Usuário não autorizado.");
-
-        const indexPostagem = Postagem.listaPostagens.indexOf(postagem);
-
-        if (indexPostagem !== -1) {
-           Postagem.listaPostagens.splice(indexPostagem, 1);
-        }
+        if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
+        const indicePostagem = Postagem.listaPostagens.indexOf(postagem);
+        if (indicePostagem !== -1) Postagem.listaPostagens.splice(indicePostagem, 1);
     }
     comentarPostagem(postagem, comentario) {
         if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
@@ -77,7 +67,7 @@ class Usuario {
             <li class="d-flex justify-content-between align-items-center ${inicio && 'mt-3'} ${final && 'border-bottom pb-3'}">
                 <div class="d-flex align-items-center">
                     <img src="${this.imagemPerfil}" class="rounded-circle me-3" height="50" width="50" alt="">
-                    <h6>${this.nomeCompleto}</h6>
+                    <h6>${this.#nomeCompleto}</h6>
                 </div>
                 <button type="button" class="btn btn-outline-danger" onclick="removerAmigo('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Remover</button>
             </li>
@@ -104,7 +94,9 @@ class Usuario {
                         }
                     ${
                         usuarioSessao !== this
-                            ? ehAdministrador ? `<button type="button" class="btn btn-outline-danger" onclick="removerUsuario('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Excluir</button>` : ''
+                            ? ehAdministrador
+                                ? `<button type="button" class="btn btn-outline-danger" onclick="removerUsuario('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Excluir</button>`
+                                : ''
                             : ''
                 }
                 </div>
@@ -138,17 +130,11 @@ class Usuario {
     static listaUsuarios = [];
 
     static login(nomeUsuario, senha) {
-        let indiceUsuario = Usuario.listaUsuarios.findIndex((usuario) => {
-            return usuario.nomeUsuario === nomeUsuario;
-        });
-
-        if (indiceUsuario === -1) throw new Error("Usuário e/ou senha inválidos.");
-        return Usuario.listaUsuarios[indiceUsuario].autenticar(nomeUsuario, senha);
+        const usuario = Usuario.buscarUsuario(nomeUsuario);
+        return usuario.autenticar(nomeUsuario, senha);
     }
     static buscarUsuario(nomeUsuario) {
-        let indiceUsuario = Usuario.listaUsuarios.findIndex((usuario) => {
-            return usuario.nomeUsuario === nomeUsuario;
-        });
+        const indiceUsuario = Usuario.listaUsuarios.findIndex(usuario => usuario.nomeUsuario === nomeUsuario);
 
         if (indiceUsuario === -1) throw new Error("Usuário não encontrado");
         return Usuario.listaUsuarios[indiceUsuario]

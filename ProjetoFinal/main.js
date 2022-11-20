@@ -1,35 +1,54 @@
 import Administrador from "./class/Administrador.class.js";
 import Postagem from "./class/Postagem.class.js";
 import Usuario from "./class/Usuario.class.js";
+
 import "./populate.js";
-import { formCadastro, formLogin, formPostagem, telaFeed, telaLogin, modalCadastro, headerSaudacao, btnListaUsuarios } from "./elements.js";
+
+import {
+    formCadastro,
+    formLogin,
+    formPostagem,
+    telaFeed,
+    telaLogin,
+    modalCadastro,
+    headerSaudacao,
+    listaAmigos,
+    listaUsuarios,
+    imagensPerfil,
+    totalUsuarios,
+    totalAmigos,
+    listaPostagens,
+    modalEditarPostagem,
+    botaoSair,
+} from "./elements.js";
 
 let usuarioSessao;
 let ehAdministrador;
 
-formLogin.onsubmit = function (event) {
-    event.preventDefault();
-    const form = new FormData(this);
-    const inputUsuario = form.get("usuario");
-    const inputSenha = form.get("senha");
+formLogin.onsubmit = function (evento) {
+    evento.preventDefault();
+    const formulario = new FormData(this);
+    const nomeUsuario = formulario.get("usuario");
+    const senha = formulario.get("senha");
 
     try {
-        usuarioSessao = Usuario.login(inputUsuario, inputSenha);
+        usuarioSessao = Usuario.login(nomeUsuario, senha);
         ehAdministrador = usuarioSessao instanceof Administrador;
         this.reset();
         renderizarPaginaFeed();
+        mudarTela("feed");
     } catch (error) {
         alert(error.message);
     }
 };
 
-formPostagem.onsubmit = function (event) {
-    event.preventDefault();
-    const form = new FormData(this);
-    const inputTexto = form.get("texto");
+formPostagem.onsubmit = function (evento) {
+    evento.preventDefault();
+    const formulario = new FormData(this);
+    const descricao = formulario.get("descricao");
 
     try {
-        new Postagem(inputTexto, usuarioSessao);
+        new Postagem(descricao, usuarioSessao);
         this.reset();
         renderizarPaginaFeed();
     } catch (error) {
@@ -37,158 +56,154 @@ formPostagem.onsubmit = function (event) {
     }
 };
 
-formCadastro.onsubmit = function (event) {
-    event.preventDefault();
-    const form = new FormData(this);
+formCadastro.onsubmit = function (evento) {
+    evento.preventDefault();
+    const formulario = new FormData(this);
 
-    const nomeCompleto = form.get("nome-completo");
-    const usuario = form.get("usuario");
-    const senha = form.get("senha");
-    const usuarioGithub = form.get("usuario-github");
+    const nomeCompleto = formulario.get("nome-completo");
+    const usuario = formulario.get("usuario");
+    const senha = formulario.get("senha");
+    const usuarioGithub = formulario.get("usuario-github");
 
     usuarioSessao = new Usuario(nomeCompleto, usuario, senha, usuarioGithub);
     ehAdministrador = false;
 
-    const modal = bootstrap.Modal.getInstance(modalCadastro);    
+    const modal = bootstrap.Modal.getInstance(modalCadastro);
     modal.hide();
 
     this.reset();
     renderizarPaginaFeed();
+    mudarTela("feed ");
 };
 
 function renderizarPaginaFeed() {
     headerSaudacao.innerHTML = `Olá, ${usuarioSessao.nomeCompleto}`;
-    document.querySelector("#header-imagem-perfil").src = usuarioSessao.imagemPerfil;
-    document.querySelector("#postagem-imagem-perfil").src = usuarioSessao.imagemPerfil;
+    imagensPerfil.forEach(
+        (imagem) => (imagem.src = usuarioSessao.imagemPerfil)
+    );
 
-    document.querySelector("#lista-amigos").innerHTML = usuarioSessao.amigos.map((amigo, index) => {
-        let especial;
-        if(usuarioSessao.amigos.length === 1){
-            especial = 'unico';
-        }
-        else if(index === 0) {
-            especial = 'primeiro';
-        }
-        else if(index === usuarioSessao.amigos.length - 1) {
-            especial = 'ultimo';
-        }
-        else {
-            especial = 'meio';
-        }
-        return amigo.renderizarItemAmigo(especial)
-    }).join('');
+    listaAmigos.innerHTML = usuarioSessao.amigos
+        .map((amigo, indice) => {
+            let especial;
+            if (usuarioSessao.amigos.length === 1) {
+                especial = "unico";
+            } else if (indice === 0) {
+                especial = "primeiro";
+            } else if (indice === usuarioSessao.amigos.length - 1) {
+                especial = "ultimo";
+            } else {
+                especial = "meio";
+            }
+            return amigo.renderizarItemAmigo(especial);
+        })
+        .join("");
 
-    document.querySelector("#lista-usuarios").innerHTML = Usuario.listaUsuarios.map((usuario, index) => {
-        let especial;
-        if(Usuario.listaUsuarios.length === 1){
-            especial = 'unico';
-        }
-        else if(index === 0) {
-            especial = 'primeiro';
-        }
-        else if(index === Usuario.listaUsuarios.length - 1) {
-            especial = 'ultimo';
-        }
-        else {
-            especial = 'meio';
-        }
-        return usuario.renderizarItemUsuario(especial, usuarioSessao, ehAdministrador, usuarioSessao.ehAmigo(usuario))
-    }).join('');
+    listaUsuarios.innerHTML = Usuario.listaUsuarios
+        .map((usuario, indice) => {
+            let especial;
+            if (Usuario.listaUsuarios.length === 1) {
+                especial = "unico";
+            } else if (indice === 0) {
+                especial = "primeiro";
+            } else if (indice === Usuario.listaUsuarios.length - 1) {
+                especial = "ultimo";
+            } else {
+                especial = "meio";
+            }
+            return usuario.renderizarItemUsuario(
+                especial,
+                usuarioSessao,
+                ehAdministrador,
+                usuarioSessao.ehAmigo(usuario)
+            );
+        })
+        .join("");
 
-    if(usuarioSessao.amigos.length === 0) {
-        document.querySelector("#lista-amigos").innerHTML = '<li class="text-center p-3">Você ainda não tem ninguém na lista de amigos.</li>'
+    if (usuarioSessao.amigos.length === 0) {
+        listaAmigos.innerHTML =
+            '<li class="text-center p-3">Você ainda não tem ninguém na lista de amigos.</li>';
     }
 
-    document.querySelector('#total-amigos').innerHTML = usuarioSessao.amigos.length;
-    document.querySelector('#total-usuarios').innerHTML = Usuario.listaUsuarios.length;
-
-    mudarTela('feed');
+    totalAmigos.innerHTML = usuarioSessao.amigos.length;
+    totalUsuarios.innerHTML = Usuario.listaUsuarios.length;
 
     const postagens = Postagem.listaPostagens
-              .map((postagem, idPostagem) => {
-                if(usuarioSessao === postagem.autor || usuarioSessao.ehAmigo(postagem.autor)) {
-                    return postagem.renderizar(idPostagem, usuarioSessao)
-                }
-                return;
-            }).join("");
-            
-    document.querySelector("#postagens").innerHTML = postagens !== '' ? postagens : '<div class="w-100 d-flex flex-grow-1 justify-content-center align-items-center">Nenhuma postagem, adicione amigos e veja aqui as atualizações</div>';
+        .map((postagem, indicePostagem) => {
+            if (
+                usuarioSessao === postagem.autor ||
+                usuarioSessao.ehAmigo(postagem.autor)
+            ) {
+                return postagem.renderizar(indicePostagem, usuarioSessao);
+            }
+            return;
+        })
+        .join("");
+
+    listaPostagens.innerHTML =
+        postagens !== ""
+            ? postagens
+            : '<div class="w-100 d-flex flex-grow-1 justify-content-center align-items-center">Nenhuma postagem, adicione amigos e veja aqui as atualizações</div>';
 }
 
-function adicionarAmigo(nomeUsuario){
+function adicionarAmigo(nomeUsuario) {
     try {
         const amigo = Usuario.buscarUsuario(nomeUsuario);
         usuarioSessao.adicionarAmigo(amigo);
         amigo.adicionarAmigo(usuarioSessao);
         renderizarPaginaFeed();
-     }
-     catch(error){
+    } catch (error) {
         console.log(error);
     }
 }
-
-function removerAmigo(nomeUsuario){
+function removerAmigo(nomeUsuario) {
     try {
         const amigo = Usuario.buscarUsuario(nomeUsuario);
         usuarioSessao.removerAmigo(amigo);
         amigo.removerAmigo(usuarioSessao);
         renderizarPaginaFeed();
-     }
-     catch(error){
+    } catch (error) {
         console.log(error);
-     }
-}
-function removerUsuario(nomeUsuario){
-    try {
-        const usuario = Usuario.buscarUsuario(nomeUsuario);
-        console.log(Usuario.listaUsuarios)
-
-        usuario.amigos.forEach(amigo=>{
-            amigo.removerAmigo(usuario);
-        })
-
-        Postagem.listaPostagens.forEach(postagem => {
-            if(postagem.autor === usuario){
-                usuarioSessao.apagarPostagem(postagem);
-                return;
-            }
-            postagem.comentarios.forEach(comentario => {
-                if(comentario.autor === usuario){
-                    postagem.apagarComentario(comentario);
-                    return;
-                }
-            })
-        });
-
-        if(ehAdministrador) {
-            usuarioSessao.excluirUsuario(usuario)
-        }
-        renderizarPaginaFeed();
-     }
-     catch(error){
-        console.log(error);
-     }
-}
-
-document.querySelector("#btn-sair").addEventListener("click", () => {
-    if(usuarioSessao !== undefined) {
-        usuarioSessao.desconectar();
     }
-    usuarioSessao = undefined;
-    ehAdministrador = false;
+}
+function removerUsuario(nomeUsuario) {
+    if (ehAdministrador) {
+        try {
+            const usuario = Usuario.buscarUsuario(nomeUsuario);
 
-    mudarTela('login');
-});
+            usuario.amigos.forEach((amigo) => {
+                amigo.removerAmigo(usuario);
+            });
 
-function mudarTela(tela){
+            Postagem.listaPostagens.forEach((postagem) => {
+                if (postagem.autor === usuario) {
+                    usuarioSessao.apagarPostagem(postagem);
+                    return;
+                } else {
+                    postagem.comentarios.forEach((comentario) => {
+                        if (comentario.autor === usuario) {
+                            postagem.apagarComentario(comentario);
+                            return;
+                        }
+                    });
+                }
+            });
+
+            usuarioSessao.excluirUsuario(usuario);
+            renderizarPaginaFeed();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+function mudarTela(tela) {
     telaLogin.classList.replace("d-flex", "d-none");
     telaFeed.classList.replace("d-flex", "d-none");
-    
+
     switch (tela) {
-        case 'login':
+        case "login":
             telaLogin.classList.replace("d-none", "d-flex");
             break;
-        case 'feed':
+        case "feed":
             telaFeed.classList.replace("d-none", "d-flex");
             break;
         default:
@@ -197,45 +212,64 @@ function mudarTela(tela){
     }
 }
 
-const modalEditarPostagem = document.querySelector("#modal-editar-postagem")
-modalEditarPostagem.addEventListener('show.bs.modal', event => {
-    const button = event.relatedTarget
-    const idPostagem = button.getAttribute('data-bs-id');
+modalEditarPostagem.addEventListener("show.bs.modal", (evento) => {
+    const button = evento.relatedTarget;
+    const indicePostagem = button.getAttribute("data-bs-id");
 
-    const postagem = Postagem.localizarPorId(idPostagem);
+    const postagem = Postagem.localizarPorIndice(indicePostagem);
 
-    const inputTexto = modalEditarPostagem.querySelector('.modal-body input');
-    const botaoSalvar = modalEditarPostagem.querySelector('.modal-body button');
+    const inputDescricao =
+        modalEditarPostagem.querySelector(".modal-body input");
+    const botaoSalvar = modalEditarPostagem.querySelector(
+        ".modal-body  button"
+    );
 
-    inputTexto.value = postagem.descricao
-    
-    botaoSalvar.onclick = function(e) {
-        e.preventDefault();
-        postagem.modificarDescricao(inputTexto.value);
+    inputDescricao.value = postagem.descricao;
+
+    botaoSalvar.onclick = function (eventoSalvar) {
+        eventoSalvar.preventDefault();
+        postagem.modificarDescricao(inputDescricao.value);
         const modal = bootstrap.Modal.getInstance(modalEditarPostagem);
-        modal.hide()
+        modal.hide();
         renderizarPaginaFeed();
-    }
-})
+    };
+});
 
-function adicionarComentario (event) {
-    event.preventDefault();
-    const idPostagem = event.target.getAttribute('data-id');
-    const descricao = event.target.querySelector('input').value;
-    const postagem = Postagem.localizarPorId(idPostagem);
+function adicionarComentario(evento) {
+    evento.preventDefault();
+    const indicePostagem = evento.target.getAttribute("data-id");
+    const descricao = evento.target.querySelector("input").value;
+    const postagem = Postagem.localizarPorIndice(indicePostagem);
     postagem.adicionarComentario(descricao, usuarioSessao);
-    renderizarPaginaFeed()
+    renderizarPaginaFeed();
 }
 
-function apagarComentario (idPostagem, idComentario) {
-    const postagem = Postagem.localizarPorId(idPostagem);
+function apagarComentario(idPostagem, idComentario) {
+    const postagem = Postagem.localizarPorIndice(idPostagem);
     const comentario = postagem.localizarComentarioPorId(idComentario);
     postagem.apagarComentario(comentario);
-    renderizarPaginaFeed()
+    renderizarPaginaFeed();
 }
+
+function apagarPostagem(indicePostagem) {
+    const postagem = Postagem.localizarPorIndice(indicePostagem);
+    usuarioSessao.apagarPostagem(postagem);
+    renderizarPaginaFeed();
+}
+
+botaoSair.addEventListener("click", () => {
+    if (usuarioSessao !== undefined) {
+        usuarioSessao.desconectar();
+    }
+    usuarioSessao = undefined;
+    ehAdministrador = false;
+
+    mudarTela("login");
+});
 
 window.adicionarAmigo = adicionarAmigo;
 window.removerAmigo = removerAmigo;
 window.removerUsuario = removerUsuario;
 window.adicionarComentario = adicionarComentario;
 window.apagarComentario = apagarComentario;
+window.apagarPostagem = apagarPostagem;

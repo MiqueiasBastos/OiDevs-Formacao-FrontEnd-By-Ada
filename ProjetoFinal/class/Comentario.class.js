@@ -1,20 +1,20 @@
 class Comentario {
     #descricao;
-    #usuario;
+    #autor;
 
-    constructor(descricao, usuario) {
+    constructor(descricao, autor) {
         this.#descricao = descricao;
-        this.#usuario = usuario;
+        this.#autor = autor;
     }
 
-    renderizar(usuarioSessao, idPostagem, idComentario) {
+    renderizar(usuarioSessao, indicePostagem, indiceComentario) {
         return `
             <li class="ms-3 border-start border-3 border-success ps-2">
                 <h6 class="d-flex align-items-center">
-                    ${this.#usuario.nomeCompleto}
+                    ${this.#autor.nomeCompleto}
                     ${
-                        this.#usuario === usuarioSessao
-                            ? `<button class="btn btn-link text-danger p-0 ms-1" onclick="apagarComentario(${idPostagem}, ${idComentario})"><i class="bi bi-trash3-fill"></i></button>`
+                        this.#autor === usuarioSessao
+                            ? `<button class="btn btn-link text-danger p-0 ms-1" onclick="apagarComentario(${indicePostagem}, ${indiceComentario})"><i class="bi bi-trash3-fill"></i></button>`
                             : ''
                     }
                 </h6>
