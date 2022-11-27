@@ -1,4 +1,5 @@
 import Comentario from "./Comentario.class.js";
+import Usuario from "./Usuario.class.js";
 
 class Postagem {
     #descricao;
@@ -99,6 +100,22 @@ class Postagem {
         if (comentario === undefined) throw new Error("Comentário não encontrado.");
         return comentario;
     }
+    objetoLocalStorage(){
+        return {
+            descricao: this.#descricao,
+            comentarios: this.#comentarios.map(comentario => {
+                return {
+                    descricao: comentario.descricao,
+                    autor: comentario.autor.nomeUsuario
+                }
+            }),
+            timestamp: this.#timestamp,
+            autor: this.#autor.nomeUsuario,
+        }
+    }
+    definirTimestamp(timestamp){
+        this.#timestamp = timestamp;
+    }
 
     get descricao() {
         return this.#descricao;
@@ -120,7 +137,9 @@ class Postagem {
     get autor() {
         return this.#autor;
     }
-
+    get comentarios() {
+        return this.#comentarios;
+    }
     static listaPostagens = [];
 
     static localizarPorIndice(indice) {
@@ -128,6 +147,17 @@ class Postagem {
         if(postagem === undefined) throw new Error("Postagem não encontrada");
         return Postagem.listaPostagens[indice];
     }
+    static criarDeObjeto(objetoPostagem) {
+        const { descricao, comentarios, timestamp, autor } = objetoPostagem;
+
+        const postagem = new Postagem(descricao, Usuario.buscarUsuario(autor));
+        comentarios.forEach(({descricao: descricaoComentario, autor}) => {
+            postagem.adicionarComentario(descricaoComentario, Usuario.buscarUsuario(autor));
+        })
+        postagem.definirTimestamp(timestamp);
+        return postagem
+    }
+
 }
 
 export default Postagem;

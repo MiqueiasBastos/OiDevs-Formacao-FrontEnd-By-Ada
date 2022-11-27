@@ -1,5 +1,6 @@
 import Postagem from "./Postagem.class.js";
 import md5 from "../libs/md5.js";
+import Administrador from "./Administrador.class.js";
 
 class Usuario {
     #nomeCompleto;
@@ -10,12 +11,16 @@ class Usuario {
     #estaAutenticado = false;
 
     constructor(nomeCompleto, nomeUsuario, senha, usuarioGithub = "") {
-        if (typeof nomeUsuario !== "string") throw new TypeError("Usuário inválido");
+        if (typeof nomeUsuario !== "string")
+            throw new TypeError("Usuário inválido");
         if (typeof senha !== "string") throw new TypeError("Senha invalida");
 
-        const usuarioJaExiste = Usuario.listaUsuarios.findIndex(usuario => usuario.nomeUsuario === nomeUsuario) !== -1
-            ? true
-            : false;
+        const usuarioJaExiste =
+            Usuario.listaUsuarios.findIndex(
+                (usuario) => usuario.nomeUsuario === nomeUsuario
+            ) !== -1
+                ? true
+                : false;
 
         if (usuarioJaExiste) throw new Error("O usuário já existe!");
 
@@ -29,7 +34,8 @@ class Usuario {
 
     autenticar(nomeUsuario, senha) {
         const senhaHash = md5(senha);
-        if (nomeUsuario !== this.#nomeUsuario || senhaHash !== this.#senha) throw new Error("Usuário e/ou senha inválidos!");
+        if (nomeUsuario !== this.#nomeUsuario || senhaHash !== this.#senha)
+            throw new Error("Usuário e/ou senha inválidos!");
         this.#estaAutenticado = true;
         return this;
     }
@@ -50,7 +56,8 @@ class Usuario {
     apagarPostagem(postagem) {
         if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
         const indicePostagem = Postagem.listaPostagens.indexOf(postagem);
-        if (indicePostagem !== -1) Postagem.listaPostagens.splice(indicePostagem, 1);
+        if (indicePostagem !== -1)
+            Postagem.listaPostagens.splice(indicePostagem, 1);
     }
     comentarPostagem(postagem, comentario) {
         if (!this.#estaAutenticado) throw new Error("Usuário não autorizado.");
@@ -59,26 +66,9 @@ class Usuario {
     ehAmigo(usuario) {
         return this.#amigos.findIndex((amigo) => amigo === usuario) !== -1;
     }
-    renderizarItemAmigo(especial = ''){
-        const inicio = especial !== 'primeiro' && especial !== 'unico';
-        const final = especial !== 'ultimo' && especial !== 'unico';
-
+    renderizarItemModal(usuarioSessao) {
         return `
-            <li class="d-flex justify-content-between align-items-center ${inicio && 'mt-3'} ${final && 'border-bottom pb-3'}">
-                <div class="d-flex align-items-center">
-                    <img src="${this.imagemPerfil}" class="rounded-circle me-3" height="50" width="50" alt="">
-                    <h6>${this.#nomeCompleto}</h6>
-                </div>
-                <button type="button" class="btn btn-outline-danger" onclick="removerAmigo('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Remover</button>
-            </li>
-        `;
-    }
-    renderizarItemUsuario(especial = '', usuarioSessao, ehAdministrador, ehAmigo){
-        const inicio = especial !== 'primeiro' && especial !== 'unico';
-        const final = especial !== 'ultimo' && especial !== 'unico';
-
-        return `
-            <li class="d-flex justify-content-between align-items-center ${inicio && 'mt-3'} ${final && 'border-bottom pb-3'}">
+            <li class="d-flex justify-content-between align-items-center mt-3 border-bottom pb-3">
                 <div class="d-flex align-items-center">
                     <img src="${this.imagemPerfil}" class="rounded-circle me-3"
                         height="50" width="50" alt="">
@@ -87,21 +77,42 @@ class Usuario {
                 <div>
                     ${
                         usuarioSessao !== this
-                            ? ehAmigo
-                                ? `<button type="button" class="btn btn-outline-success" onclick="removerAmigo('${this.#nomeUsuario}')"><i class="bi bi-person-check-fill"></i> Amigo</button>`
-                                : `<button type="button" class="btn btn-success" onclick="adicionarAmigo('${this.#nomeUsuario}')"><i class="bi bi-person-plus-fill"></i> Adicionar</button>`
-                            : ''
-                        }
+                            ? this.ehAmigo(usuarioSessao)
+                                ? `<button type="button" class="btn btn-outline-success" onclick="removerAmigo('${
+                                      this.#nomeUsuario
+                                  }')"><i class="bi bi-person-check-fill"></i> Amigo</button>`
+                                : `<button type="button" class="btn btn-success" onclick="adicionarAmigo('${
+                                      this.#nomeUsuario
+                                  }')"><i class="bi bi-person-plus-fill"></i> Adicionar</button>`
+                            : ""
+                    }
                     ${
                         usuarioSessao !== this
-                            ? ehAdministrador
-                                ? `<button type="button" class="btn btn-outline-danger" onclick="removerUsuario('${this.#nomeUsuario}')"><i class="bi bi-trash3-fill"></i> Excluir</button>`
-                                : ''
-                            : ''
-                }
+                            ? usuarioSessao instanceof Administrador
+                                ? `<button type="button" class="btn btn-outline-danger" onclick="removerUsuario('${
+                                      this.#nomeUsuario
+                                  }')"><i class="bi bi-trash3-fill"></i> Excluir</button>`
+                                : ""
+                            : ""
+                    }
                 </div>
             </li>
         `;
+    }
+
+    objetoLocalStorage() {
+        return {
+            nomeCompleto: this.#nomeCompleto,
+            nomeUsuario: this.#nomeUsuario,
+            senha: this.#senha,
+            amigos: this.#amigos.map((amigo) => amigo.nomeUsuario),
+            usuarioGithub: this.#usuarioGithub,
+            admin: this instanceof Administrador,
+        };
+    }
+
+    definirHashSenha(hashSenha) {
+        this.#senha = hashSenha;
     }
 
     get nomeUsuario() {
@@ -113,16 +124,13 @@ class Usuario {
     get estaAutenticado() {
         return this.#estaAutenticado;
     }
-    get usuarioGithub() {
-        return this.#usuarioGithub;
-    }
     get amigos() {
         return this.#amigos;
     }
     get imagemPerfil() {
         const imagem =
-            this.usuarioGithub !== ""
-                ? `https://github.com/${this.usuarioGithub}.png`
+            this.#usuarioGithub !== ""
+                ? `https://github.com/${this.#usuarioGithub}.png`
                 : "./assets/usuario-padrao.jpg";
         return imagem;
     }
@@ -134,10 +142,23 @@ class Usuario {
         return usuario.autenticar(nomeUsuario, senha);
     }
     static buscarUsuario(nomeUsuario) {
-        const indiceUsuario = Usuario.listaUsuarios.findIndex(usuario => usuario.nomeUsuario === nomeUsuario);
+        const indiceUsuario = Usuario.listaUsuarios.findIndex(
+            (usuario) => usuario.nomeUsuario === nomeUsuario
+        );
 
         if (indiceUsuario === -1) throw new Error("Usuário não encontrado");
-        return Usuario.listaUsuarios[indiceUsuario]
+        return Usuario.listaUsuarios[indiceUsuario];
+    }
+    static criarDeObjeto(objetoUsuario) {
+        const { admin, nomeCompleto, nomeUsuario, senha, usuarioGithub } =
+            objetoUsuario;
+
+        const usuario = admin
+            ? new Administrador(nomeCompleto, nomeUsuario, senha, usuarioGithub)
+            : new Usuario(nomeCompleto, nomeUsuario, senha, usuarioGithub);
+
+        usuario.definirHashSenha(senha);
+        return usuario
     }
 }
 

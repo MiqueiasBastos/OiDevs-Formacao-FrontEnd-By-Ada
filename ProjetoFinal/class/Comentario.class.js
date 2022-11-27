@@ -15,12 +15,19 @@ class Comentario {
                     ${
                         this.#autor === usuarioSessao
                             ? `<button class="btn btn-link text-danger p-0 ms-1" onclick="apagarComentario(${indicePostagem}, ${indiceComentario})"><i class="bi bi-trash3-fill"></i></button>`
-                            : ''
+                            : ""
                     }
                 </h6>
                 <p class="fst-italic">${this.#descricao}</p>
             </li>
         `;
+    }
+
+    get autor() {
+        return this.#autor;
+    }
+    get descricao() {
+        return this.#descricao;
     }
 }
 
