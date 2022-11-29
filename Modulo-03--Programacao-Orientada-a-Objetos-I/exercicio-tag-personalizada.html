@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Personalizada</title>
+</head>
+
+<body>
+    <div style="display: flex;">
+        <pessoa nome="Miquéias"></pessoa>
+        <pessoa nome="João"></pessoa>
+        <pessoa nome="Guilherme"></pessoa>
+    </div>
+
+    <script>
+        const elements = document.querySelectorAll('pessoa').forEach((element) => {
+            element.innerHTML = element.attributes.nome.value
+            element.style.width = '200px'
+            element.style.display = 'flex';
+            element.style.justifyContent = 'center';
+            element.style.alignItems = 'center';
+            element.style.height = '200px'
+            element.style.marginRight = '10px';
+            element.style.backgroundColor = 'blue'
+        });
+    </script>
+</body>
+
+</html>
