@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Aula-02</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>@Todo-List</h2>
+        <ul class="list-group mt-3">
+            <!-- <li class="list-group-item">An item</li> -->
+        </ul>
+
+        <form class="row g-3">
+            <div class="mb-3 mt-4">
+                <label class="form-label">Nome Todo</label>
+                <input type="text" class="form-control">
+            </div>
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Adicionar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let listItems = [];
+
+        const ul = document.querySelector('ul');
+        const formTodo = document.querySelector('form');
+        const input = document.querySelector('form input');
+
+        const updateLocalData = function() {
+            const data = JSON.stringify(listItems);
+            window.localStorage.setItem('todo-data', data);
+        }
+        
+        const getLocalData = function() {
+            const localData = window.localStorage.getItem('todo-data')
+            if(!localData) {
+                window.localStorage.setItem('todo-data', "[]");
+            }
+            listItems = JSON.parse(localData || "[]");
+        }
+
+        const createLi = function (value, index) {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `${index} - ${value}`;
+            return li
+        }
+        
+        const addTodo = function (event) {
+            event.preventDefault();
+            listItems.push(input.value);
+            const li = createLi(input.value, listItems.length);
+            
+            ul.appendChild(li);
+            input.value = "";
+            updateLocalData();
+        }
+
+        const populatePage = function(){
+            getLocalData();
+            listItems.forEach((value, index) => ul.appendChild(createLi(value, index + 1)));
+        }
+
+        formTodo.addEventListener('submit', addTodo);
+
+        window.onload = populatePage;
+    </script>
+
+</body>
+
+</html>
