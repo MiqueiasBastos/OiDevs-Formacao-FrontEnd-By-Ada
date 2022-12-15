@@ -1,18 +1,3 @@
-// -- Em cada item deve conter um botao editar e deletar
-
-// -- Ao clicar clicar em editar devera abrir um modal para edicao dos dados
-// -- No modal devera conter um botao para submeter as alteracoes a api no endpoint /products/:id utilizando o verbo PUT e um cancelar
-// -- Ao clicar em cancelar devera limpar as alteracoes e fechar o modal
-// -- Ao clicar em deletar devera abrir uma janela de confirmacao com a mensagem Ao confirmar o item ${id - nome do produto} sera apagado completamente
-
-// -- Ao clicar em confirmar devera fazer uma chamada para a api /products/:id utilizando o verbo DELETE para apagar um registro
-
-// -- Barra de pesquisa
-
-// Devera conter uma barra de pesquisa para pesquisar por nome e categoria
-
-// Caso seja feita pesquisas > 1 em uma determinada categoria, devera salvar a consulta em um array no localStorage
-
 const BASE_URL = "https://servidor-aula.herokuapp.com";
 
 const productModalElement = document.querySelector("#product-modal");
@@ -250,7 +235,7 @@ formSearch.onsubmit = function (event) {
     itemsElements.forEach((item) => {
         item.classList.remove("d-none");
         const contentItem = item.querySelector("div:first-child").textContent;
-        const containSearch = contentItem.includes(textSearch);
+        const containSearch = contentItem.toUpperCase().includes(textSearch.toUpperCase());
 
         if (!containSearch) {
             item.classList.add("d-none");
