@@ -264,7 +264,6 @@ formSearch.onsubmit = function (event) {
     if (!isTextEmpty && !containsRecentSearch) {
         recentSearch.push(textSearch);
     } else if (!isTextEmpty && containsRecentSearch && !containsLocalSearch) {
-        console.log("não tem");
         localSearchData.push(textSearch);
         setLocalData();
         setSuggestionsList();
