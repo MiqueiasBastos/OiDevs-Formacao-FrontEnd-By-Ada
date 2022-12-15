@@ -1,5 +1,7 @@
 # Aula 07
 
+Link para o deploy do exercício: [Clique aqui](https://miqueiasbastos.github.io/OiDevs-Formacao-FrontEnd-By-Ada/Modulo-04--FrontEnd-Dinamico-JS-vanilla/aula-07/)
+
 ## Trefas
 
 ### Requisitos
