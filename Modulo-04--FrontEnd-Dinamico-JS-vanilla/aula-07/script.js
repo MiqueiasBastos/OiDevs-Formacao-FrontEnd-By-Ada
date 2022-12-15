@@ -7,7 +7,7 @@
 
 // -- Ao clicar em confirmar devera fazer uma chamada para a api /products/:id utilizando o verbo DELETE para apagar um registro
 
-// Barra de pesquisa
+// -- Barra de pesquisa
 
 // Devera conter uma barra de pesquisa para pesquisar por nome e categoria
 
@@ -17,6 +17,7 @@ const BASE_URL = "https://servidor-aula.herokuapp.com";
 
 const productModalElement = document.querySelector("#product-modal");
 const confirmModalElement = document.querySelector("#confirm-modal");
+const formSearch = document.querySelector("#form-search");
 
 const productModalTitleElement =
     productModalElement.querySelector(".modal-header h1");
@@ -30,6 +31,7 @@ const nameInput = productFormElement.querySelector("#name");
 const categoryInput = productFormElement.querySelector("#category");
 const priceInput = productFormElement.querySelector("#price");
 
+const suggestionsList = document.querySelector("#search-suggestions");
 const products = {
     async getAll() {
         try {
@@ -105,6 +107,32 @@ const products = {
     },
 };
 
+let recentSearch = [];
+
+const localSearchData = getLocalData();
+
+function getLocalData() {
+    const data = localStorage.getItem("crud-search-data");
+    if (!data) {
+        localStorage.setItem("crud-search-data", "[]");
+        return [];
+    }
+    const dataList = JSON.parse(data);
+    recentSearch = [...dataList];
+    return dataList;
+}
+
+function setLocalData() {
+    localStorage.setItem("crud-search-data", JSON.stringify(localSearchData));
+}
+
+function setSuggestionsList() {
+    suggestionsList.innerHTML = "";
+    localSearchData.forEach((item) => {
+        suggestionsList.innerHTML += `<option value="${item}">${item}</option>`;
+    });
+}
+
 async function openEditModal(productId) {
     productModalTitleElement.innerHTML = "Editar Produto";
 
@@ -179,24 +207,27 @@ function openConfirmExclusion(productId, productName) {
 }
 
 function createLiElement({ id, name, price, category }) {
-    return `<li class="list-group-item d-flex justify-content-between" id="item--${id}">
+    return `<li class="list-group-item d-flex justify-content-between align-items-center" id="item--${id}">
         <div>
-            <h2 class="h5">#${id} - ${name}<span class="fw-light"> - ${price.toLocaleString(
-        "pt-BR",
-        { style: "currency", currency: "BRL" }
-    )}</span></h2>
             <span class="text-muted">${category}</span>
+            <h2 class="h5 my-1">#${id} - ${name}</h2>
+            <span>Valor: ${price.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+            })}</span>
+            
         </div>
-        <div class="d-flex flex-row align-items-center">
-            <button class="btn btn-warning btn-sm text-white me-2" onclick="openEditModal(${id})"><i class="bi bi-pencil-fill"></i> Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="openConfirmExclusion(${id}, '${encodeURI(
+        <div class="d-flex flex-column flex-nowrap ms-3">
+            <button class="btn btn-warning btn-sm text-white d-flex mb-1 flex-nowrap" onclick="openEditModal(${id})"><i class="bi bi-pencil-fill me-2"></i> Editar</button>
+            <button class="btn btn-danger btn-sm d-flex flex-nowrap" onclick="openConfirmExclusion(${id}, '${encodeURI(
         name
-    )}')"><i class="bi bi-trash3-fill"></i> Excluir</button>
+    )}')"><i class="bi bi-trash3-fill me-2"></i> Excluir</button>
         </div>
     </li>`;
 }
 
 window.onload = async function () {
+    setSuggestionsList();
     const allProducts = await products.getAll();
     document.querySelector("ul").innerHTML = allProducts
         .map(createLiElement)
@@ -206,4 +237,36 @@ window.onload = async function () {
 document.querySelector("#add-button").onclick = (event) => {
     event.preventDefault();
     openAddModal();
+};
+
+formSearch.onsubmit = function (event) {
+    event.preventDefault();
+
+    const textSearch = formSearch
+        .querySelector("input")
+        .value.toLocaleUpperCase();
+    const itemsElements = document.querySelectorAll("li");
+
+    itemsElements.forEach((item) => {
+        item.classList.remove("d-none");
+        const contentItem = item.querySelector("div:first-child").textContent;
+        const containSearch = contentItem.includes(textSearch);
+
+        if (!containSearch) {
+            item.classList.add("d-none");
+        }
+    });
+
+    const isTextEmpty = textSearch === "";
+    const containsRecentSearch = recentSearch.includes(textSearch);
+    const containsLocalSearch = localSearchData.includes(textSearch);
+
+    if (!isTextEmpty && !containsRecentSearch) {
+        recentSearch.push(textSearch);
+    } else if (!isTextEmpty && containsRecentSearch && !containsLocalSearch) {
+        console.log("não tem");
+        localSearchData.push(textSearch);
+        setLocalData();
+        setSuggestionsList();
+    }
 };

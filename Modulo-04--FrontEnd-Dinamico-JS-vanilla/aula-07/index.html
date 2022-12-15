@@ -61,8 +61,15 @@
     </div>
 
     <nav class="navbar bg-secondary sticky-top">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1 text-white">CRUD Produtos</span>
+        <div class="container-fluid d-flex flex-column flex-sm-row">
+            <span class="navbar-brand m-0 h1 text-white">CRUD Produtos</span>
+            <form class="d-flex mx-0 mx-sm-3 my-2 my-sm-0 flex-grow-1 align-self-stretch" id="form-search">
+                <input class="form-control rounded-0 rounded-start" type="search" list="search-suggestions"
+                    placeholder="Pesquisar" />
+                <datalist id="search-suggestions">
+                </datalist>
+                <button class="btn btn-dark rounded-0 rounded-end" type="submit"><i class="bi bi-search"></i></button>
+            </form>
             <button class="btn btn-dark" id="add-button"><i class="bi bi-plus-lg"></i> Adicionar</button>
         </div>
     </nav>
