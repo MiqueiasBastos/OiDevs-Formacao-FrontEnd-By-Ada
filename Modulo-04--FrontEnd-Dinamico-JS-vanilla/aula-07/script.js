@@ -1,4 +1,5 @@
 const BASE_URL = "https://servidor-aula.herokuapp.com";
+// const BASE_URL = "http://localhost:9090";
 
 const productModalElement = document.querySelector("#product-modal");
 const confirmModalElement = document.querySelector("#confirm-modal");
@@ -133,7 +134,7 @@ async function openEditModal(productId) {
         event.preventDefault();
 
         const product = {
-            name: nameInput.value,
+            name: nameInput.value.toUpperCase(),
             category: categoryInput.value,
             price: Number(priceInput.value),
         };
@@ -192,7 +193,7 @@ function openConfirmExclusion(productId, productName) {
 }
 
 function createLiElement({ id, name, price, category }) {
-    return `<li class="list-group-item d-flex justify-content-between align-items-center" id="item--${id}">
+    return `<li class="list-group-item d-flex justify-content-between align-items-center rounded border-1 border mb-2" id="item--${id}">
         <div>
             <span class="text-muted">${category}</span>
             <h2 class="h5 my-1">#${id} - ${name}</h2>
@@ -235,7 +236,9 @@ formSearch.onsubmit = function (event) {
     itemsElements.forEach((item) => {
         item.classList.remove("d-none");
         const contentItem = item.querySelector("div:first-child").textContent;
-        const containSearch = contentItem.toUpperCase().includes(textSearch.toUpperCase());
+        const containSearch = contentItem
+            .toUpperCase()
+            .includes(textSearch.toUpperCase());
 
         if (!containSearch) {
             item.classList.add("d-none");
