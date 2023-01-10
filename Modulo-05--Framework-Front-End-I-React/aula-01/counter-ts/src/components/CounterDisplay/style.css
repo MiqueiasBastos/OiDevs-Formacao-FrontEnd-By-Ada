@@ -1,0 +1,10 @@
+div.display-counter {
+    padding: 10px 20px;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #CCC;
+    margin: 0 20px;
+    border-radius: 10px;
+}

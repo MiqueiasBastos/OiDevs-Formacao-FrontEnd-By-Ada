@@ -1,0 +1,9 @@
+button.btn-default {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    background-color: rgb(35, 60, 169);
+    color: rgb(255, 255, 255);
+    text-transform: uppercase;
+}
