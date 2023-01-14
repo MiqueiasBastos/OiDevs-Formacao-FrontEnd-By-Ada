@@ -1,0 +1,209 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+    background-color: #30353a;
+}
+
+#lampada {
+    width: 300px;
+    height: 473px;
+    position: relative;
+    margin-bottom: 50px;
+    
+}
+
+.contato,
+#terminal,
+.rosca,
+#aluminio,
+.filamento,
+.vidro,
+.haste,
+#reflexo {
+    position: absolute;
+}
+
+.vidro {
+    background-color: #767e87;
+    transition: background-color 0.2s;
+}
+
+#vidro-1 {
+    width: 300px;
+    height: 300px;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+}
+
+#vidro-2,
+#vidro-3 {
+    width: 90px;
+    height: 200px;
+    border-radius: 20px;
+    top: 167px;
+}
+
+#vidro-2 {
+    left: 44px;
+    transform: rotate(-25deg);
+}
+
+#vidro-3 {
+    right: 44px;
+    transform: rotate(25deg);
+}
+
+#vidro-4 {
+    width: 138px;
+    height: 60px;
+    top: 311px;
+    left: 81px;
+    border-radius: 20px;
+}
+
+#reflexo {
+    width: 200px;
+    height: 110px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    top: 10px;
+    left: 50px;
+}
+
+.rosca {
+    width: 136px;
+    height: 15px;
+    left: 82px;
+    border-radius: 8px;
+    background-color: #bbb;
+}
+
+#aluminio {
+    width: 126px;
+    height: 90px;
+    top: 371px;
+    left: 87px;
+    border-radius: 15px 15px 40px 40px;
+    background-color: #ccc;
+}
+
+#rosca-1 {
+    top: 371px;
+}
+
+#rosca-2 {
+    top: 401px;
+}
+
+#rosca-3 {
+    top: 431px;
+    width: 128px;
+    left: 86px;
+}
+
+#terminal {
+    width: 46px;
+    height: 46px;
+    top: 427px;
+    left: 127px;
+    border-radius: 50%;
+    background-color: #aaa;
+}
+
+.haste {
+    background-color: #aaa;
+    width: 7px;
+    height: 180px;
+    top: 210px;
+    border-radius: 5px;
+}
+
+#haste-1 {
+    left: 118px;
+    transform: rotate(-8deg);
+}
+
+#haste-2 {
+    right: 118px;
+    transform: rotate(8deg);
+}
+
+.filamento {
+    border-color: #aaa;
+    width: 15px;
+    height: 20px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-style: solid;
+}
+
+#filamento-1 {
+    top: 202px;
+    left: 109px;
+}
+
+#filamento-2 {
+    top: 200px;
+    left: 122px;
+}
+
+#filamento-3 {
+    top: 198px;
+    left: 134px;
+}
+
+#filamento-4 {
+    top: 198px;
+    left: 147px;
+}
+
+#filamento-5 {
+    top: 200px;
+    left: 159px;
+}
+
+#filamento-6 {
+    top: 202px;
+    left: 172px;
+}
+
+label[for="toggle"] {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    background-color: #1d6dce;
+    color: #fff;
+}
+#toggle:checked ~ label[for="toggle"] {
+    background-color: #800000;
+} 
+
+#toggle {
+    opacity: 0;
+}
+
+#toggle:checked ~ #lampada .vidro {
+    background-color: #ffff80;
+}
+#toggle:checked ~ #lampada .filamento {
+    border-color: #d9c426;
+}
+#toggle:checked ~ #lampada .haste {
+    background-color: #a29321;
+}
+body:has(#toggle:checked) {
+    background-color: #FFF !important;
+}
