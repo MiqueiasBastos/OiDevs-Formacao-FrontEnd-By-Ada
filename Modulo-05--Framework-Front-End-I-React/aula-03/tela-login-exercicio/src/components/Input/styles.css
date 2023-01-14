@@ -1,0 +1,13 @@
+.label-input-default {
+    color: #e1e1e1;
+    margin: 25px 0 5px 0;
+}
+
+.input-default {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #e1e1e1;
+    height: 30px;
+    outline: none;
+    color: #e1e1e1;
+}

@@ -1,0 +1,13 @@
+.btn-default {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    height: 50px;
+    margin-top: 25px;
+    transition: .2s all;
+}
+
+.btn-default:hover {
+    opacity: .8;
+}
