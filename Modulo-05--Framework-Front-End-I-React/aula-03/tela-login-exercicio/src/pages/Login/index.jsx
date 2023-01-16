@@ -11,7 +11,7 @@ function Login() {
                 <Title text="Login" />
                 <Input label="Usuário" />
                 <Input label="Senha" hideContent />
-                <Button title="login" />
+                <Button title="login" url="https://discord.gg/YEk8cfm4"/>
                 <Link text="Esqueceu a senha?" url="https://google.com" />
             </div>
         </div>
