@@ -5,7 +5,8 @@ import Home from "./pages/Home";
 
 function App() {
     return (
-        <Router basename="/OiDevs-Formacao-FrontEnd-By-Ada/Modulo-05--Framework-Front-End-I-React/aula-03/tela-login-exercicio/build/">
+        // Build <Router basename="/OiDevs-Formacao-FrontEnd-By-Ada/Modulo-05--Framework-Front-End-I-React/aula-03/tela-login-exercicio/build/">
+        <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/home" element={<Home />} />
