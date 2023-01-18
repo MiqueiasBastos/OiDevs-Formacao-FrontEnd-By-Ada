@@ -1,5 +1,6 @@
 import "./styles.css";
-function Button({ title, bgColor = "#a13854", color = "#fff", onClick }) {
+
+const Button = ({ title, bgColor = "#a13854", color = "#fff", onClick }) => {
     return (
         <button
             className="btn-default"

@@ -1,5 +1,6 @@
 import "./styles.css";
-function Input({ label, hideContent }) {
+
+const Input = ({ label, hideContent }) => {
     return (
         <>
             <label className="label-input-default">{label}</label>

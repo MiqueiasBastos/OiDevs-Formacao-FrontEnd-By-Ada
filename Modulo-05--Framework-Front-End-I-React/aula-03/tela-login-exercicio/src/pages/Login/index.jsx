@@ -6,7 +6,7 @@ import Input from "../../components/Input";
 import Title from "../../components/Title";
 import Link from "../../components/Link";
 
-function Login() {
+const Login = () => {
     const navigate = useNavigate();
     return (
         <div className="container">

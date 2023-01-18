@@ -2,7 +2,7 @@ import "./styles.css";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 
-function Home() {
+const Home = () => {
     const navigate = useNavigate()
     return (
         <div className="container">

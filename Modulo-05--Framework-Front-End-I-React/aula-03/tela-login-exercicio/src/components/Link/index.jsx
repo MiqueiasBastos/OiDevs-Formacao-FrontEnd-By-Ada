@@ -1,6 +1,6 @@
 import "./styles.css";
 
-function Link({ text, url }) {
+const Link = ({ text, url }) => {
     return (
         <a className="link" href={url}>
             {text}
