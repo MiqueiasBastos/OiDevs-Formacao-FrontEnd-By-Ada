@@ -1,4 +1,5 @@
 import "./styles.css";
+import PropTypes from "prop-types";
 
 const Input = ({ label, hideContent }) => {
     return (
@@ -10,6 +11,11 @@ const Input = ({ label, hideContent }) => {
             />
         </>
     );
-}
+};
+
+Input.propTypes = {
+    label: PropTypes.string,
+    hideContent: PropTypes.bool,
+};
 
 export default Input;
