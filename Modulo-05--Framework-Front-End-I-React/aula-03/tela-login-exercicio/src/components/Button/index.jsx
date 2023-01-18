@@ -1,7 +1,7 @@
 import "./styles.css";
 import PropTypes from "prop-types";
 
-const Button = ({ title, bgColor = "#a13854", color = "#fff", onClick }) => {
+const Button = ({ title, bgColor, color, onClick }) => {
     return (
         <button
             className="btn-default"
@@ -19,5 +19,10 @@ Button.propTypes = {
     color: PropTypes.string,
     onClick: PropTypes.func,
 };
+
+Button.defaultProps = {
+    bgColor: "#a13854",
+    color: "#fff"
+}
 
 export default Button;
