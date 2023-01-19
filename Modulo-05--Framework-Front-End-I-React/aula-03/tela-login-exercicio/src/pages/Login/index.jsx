@@ -6,6 +6,7 @@ import Input from "../../components/Input";
 import Title from "../../components/Title";
 import Link from "../../components/Link";
 import { useState } from "react";
+import Subtitle from "../../components/Subtitle";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Login = () => {
         <div className="container">
             <div className="box-login">
                 <Title text={title} />
-                {user && <label style={{ color: "#FFF" }}>Olá {user}</label>}
+                {user && <Subtitle text={`Usuário: ${user}`} />}
                 <Input
                     label="Usuário"
                     value={user}
