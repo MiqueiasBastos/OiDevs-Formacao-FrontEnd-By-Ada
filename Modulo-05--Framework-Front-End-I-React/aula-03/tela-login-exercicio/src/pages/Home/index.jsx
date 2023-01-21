@@ -1,14 +1,23 @@
 import "./styles.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 
 const Home = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const { users } = location.state;
     return (
         <div className="container">
             <h1>Home</h1>
+            <ul>
+                {users.map((user, index) => (
+                    <li key={`${user}-${index}`}>{user.username}</li>
+                ))}
+            </ul>
             <Button title="Sair" onClick={() => navigate("/")} />
         </div>
     );
-}
+};
+
 export default Home;
