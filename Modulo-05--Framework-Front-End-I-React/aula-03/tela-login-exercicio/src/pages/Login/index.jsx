@@ -16,15 +16,17 @@ const Login = () => {
 
     const [userNotFound, setUserNotFound] = useState(false);
     const [incorrectPassword, setIncorrectPassword] = useState(false);
-    
+
     const [showError, setShowError] = useState(false);
 
     const [userDatabase, setUserDatabase] = useState([
         {
+            id: 1,
             username: "miqueias",
             password: "123",
         },
         {
+            id: 2,
             username: "raniel",
             password: "oidevs",
         },
@@ -52,7 +54,7 @@ const Login = () => {
         navigate("/home", {
             state: {
                 users: userDatabase,
-            },
+            }
         });
     }
 
@@ -60,7 +62,9 @@ const Login = () => {
         <div className="container">
             <div className="box-login">
                 <Title text={title} />
-                {showError && <ErrorMessage message="Usuário ou senha inválidos" />}
+                {showError && (
+                    <ErrorMessage message="Usuário ou senha inválidos" />
+                )}
                 <Input
                     label="Usuário"
                     colorLabel={userNotFound ? "#a13854" : "white"}

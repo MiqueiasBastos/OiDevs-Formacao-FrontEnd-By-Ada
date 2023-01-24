@@ -11,8 +11,8 @@ const Home = () => {
         <div className="container">
             <h1>Home</h1>
             <ul>
-                {users.map((user, index) => (
-                    <li key={`${user}-${index}`}>{user.username}</li>
+                {users.map((user) => (
+                    <li key={user.id}>{user.username}</li>
                 ))}
             </ul>
             <Button title="Sair" onClick={() => navigate("/")} />
