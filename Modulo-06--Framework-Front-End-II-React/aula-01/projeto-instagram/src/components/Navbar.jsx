@@ -2,15 +2,7 @@ import styled from "styled-components";
 import { NavItem } from "./NavItem";
 import { Title } from "./Title";
 
-const items = [
-    { title: "Página Inicial", icon: "home" },
-    { title: "Pesquisa", icon: "search" },
-    { title: "Explorar", icon: "discovery" },
-    { title: "Reels", icon: "reels" },
-    { title: "Mensagens", icon: "messages" },
-    { title: "Notificações", icon: "notifications" },
-    { title: "Criar", icon: "create" },
-];
+import { itemsMenu } from "../data";
 
 const NavbarWrapper = styled.div`
     display: flex;
@@ -19,20 +11,22 @@ const NavbarWrapper = styled.div`
     height: 100%;
     justify-content: space-between;
     padding: 8px 12px 20px;
+    border-right: 1px solid #262626;
 `;
 
 const Box = styled.div``;
 
-export const Navbar = (props) => {
+export const Navbar = () => {
     return (
         <NavbarWrapper>
             <Box>
                 <Title />
-                {items.map((item) => (
+                {itemsMenu.map((item) => (
                     <NavItem
                         key={item.title}
                         text={item.title}
                         icon={item.icon}
+                        notification={item.notification}
                     />
                 ))}
                 <NavItem

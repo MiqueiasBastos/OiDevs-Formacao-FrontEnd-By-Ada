@@ -10,6 +10,7 @@ const NavItemWrapper = styled.div`
     align-items: center;
     margin: 4px 0;
     transition: all 0.2s;
+    position: relative;
 
     svg {
         transition: all 0.2s;
@@ -36,9 +37,28 @@ const NavItemWrapper = styled.div`
     }
 `;
 
+const Notification = styled.div`
+    background-color: red;
+    color: white;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    z-index: 1;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 8px;
+    position: absolute;
+    font-family: "Segoe UI", sans-serif;
+    left: 26px;
+    top: 8px;
+`;
+
 export const NavItem = (props) => {
     return (
         <NavItemWrapper>
+            {props.notification && (
+                <Notification>{props.notification}</Notification>
+            )}
             {props.icon && (
                 <Icon name={props.icon} label={props.text} size={24} />
             )}
