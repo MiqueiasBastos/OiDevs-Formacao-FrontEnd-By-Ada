@@ -1,5 +1,5 @@
 import { Avatar } from "./Avatar";
-import { Button } from "./Button";
+import { Button } from "../ui/Button";
 import { Text, TextLink } from "../ui/Text";
 import styled from "styled-components";
 
@@ -73,7 +73,7 @@ export const Header = () => {
                         <Button>Enviar mensagem</Button>
                         <Button icon="follow" />
                     </ButtonsWrapper>
-                    <Button color="transparent" marginNone><Icon name="options" /></Button>
+                    <Button bgColor="transparent" marginNone><Icon name="options" /></Button>
                 </Infos>
                 <SocialInfos>
                     <CounterLabel

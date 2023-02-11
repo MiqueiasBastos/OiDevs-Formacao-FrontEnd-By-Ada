@@ -7,26 +7,26 @@ const Wrapper = styled.div`
     flex-direction: row;
     justify-content: center;
 `;
-export const Tabs = ({ atualTab, onChangeTab }) => {
+export const Tabs = ({ currentTab, onChangeTab }) => {
     return (
         <Wrapper>
             <TabItem
                 label="Publicações"
                 icon="posts"
-                atualTab={atualTab === "posts"}
-                onClick={()=> onChangeTab('posts')}
+                currentTab={currentTab === "posts"}
+                onClick={() => onChangeTab("posts")}
             />
             <TabItem
                 label="Reels"
                 icon="reels"
-                atualTab={atualTab === "reels"}
-                onClick={()=> onChangeTab('reels')}
+                currentTab={currentTab === "reels"}
+                onClick={() => onChangeTab("reels")}
             />
             <TabItem
                 label="Marcados"
                 icon="marked"
-                atualTab={atualTab === "marked"}
-                onClick={()=> onChangeTab('marked')}
+                currentTab={currentTab === "marked"}
+                onClick={() => onChangeTab("marked")}
             />
         </Wrapper>
     );

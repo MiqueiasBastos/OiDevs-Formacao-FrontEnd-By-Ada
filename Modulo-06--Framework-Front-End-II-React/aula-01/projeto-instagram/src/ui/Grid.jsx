@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Grid = styled.div`
     display: grid;
-    grid-template-columns: ${(props) => props.templateColumns};
+    grid-template-columns: ${({ templateColumns }) => templateColumns};
     overflow: hidden;
 `;
 

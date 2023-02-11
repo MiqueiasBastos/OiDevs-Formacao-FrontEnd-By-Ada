@@ -10,7 +10,7 @@ const Wrapper = styled.div`
     justify-content: center;
     cursor: pointer;
 
-    ${(props) => props.atualTab && "border-top: 2px solid #FFF"};
+    ${(props) => props.currentTab && "border-top: 2px solid #FFF"};
 
     svg {
         margin-right: 5px;
@@ -26,11 +26,15 @@ const TextTab = styled(Text)`
     text-transform: uppercase;
 `;
 
-export const TabItem = ({ label, icon, atualTab, onClick }) => {
+export const TabItem = ({ label, icon, currentTab, onClick }) => {
     return (
-        <Wrapper atualTab={atualTab} onClick={onClick}>
-            <Icon name={icon} size={12} color={atualTab ? "#FFF" : "#8e8e8e"} />
-            <TextTab bold size={12} color={atualTab ? "#FFF" : "#8e8e8e"}>
+        <Wrapper currentTab={currentTab} onClick={onClick}>
+            <Icon
+                name={icon}
+                size={12}
+                color={currentTab ? "#FFF" : "#8e8e8e"}
+            />
+            <TextTab bold size={12} color={currentTab ? "#FFF" : "#8e8e8e"}>
                 {label}
             </TextTab>
         </Wrapper>
