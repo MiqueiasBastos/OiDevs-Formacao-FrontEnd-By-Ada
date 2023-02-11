@@ -1,10 +1,10 @@
+import { useMemo, useRef, useState } from "react";
 import * as S from "../Login/style";
 
 import { Button } from "../../ui/Button";
 import { Text, TextLink } from "../../ui/Text";
 
 import { Logo } from "../../components/Logo";
-import { useEffect, useMemo, useRef, useState } from "react";
 
 export const SignUp = ({ onLoginPageClick }) => {
     const [fullName, setFullname] = useState("");
@@ -14,14 +14,6 @@ export const SignUp = ({ onLoginPageClick }) => {
     const [password, setPassword] = useState("");
 
     const dateBirhtInput = useRef(null);
-
-    useEffect(() => {
-        if (dateBirhtInput != null) {
-            dateBirhtInput.onfocus = () => {
-                dateBirhtInput.type = "date";
-            };
-        }
-    }, [dateBirhtInput]);
 
     const handdleSingupButtonClick = (e) => {
         e.preventDefault();
