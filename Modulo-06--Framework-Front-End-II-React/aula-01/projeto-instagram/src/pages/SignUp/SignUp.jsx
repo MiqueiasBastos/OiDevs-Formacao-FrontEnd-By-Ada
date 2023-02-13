@@ -12,7 +12,8 @@ export const SignUp = ({ onLoginPageClick }) => {
     const [email, setEmail] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [password, setPassword] = useState("");
-
+    
+    // const [inputDateType, setInputDateType] = useState("text");
     const dateBirhtInput = useRef(null);
 
     const handdleSingupButtonClick = (e) => {
@@ -100,15 +101,12 @@ export const SignUp = ({ onLoginPageClick }) => {
                                 }
                             />
                             <S.CustomInput
+                                // type={inputDateType}
+                                // onFocus={() => setInputDateType("date")}
+                                // onBlur={() => setInputDateType("text")}
+
                                 type="text"
                                 ref={dateBirhtInput}
-                                autoComplete="off"
-                                placeholder="Data de nascimento"
-                                value={birthDate}
-                                max={today.toISOString().split("T")[0]}
-                                onChange={(e) =>
-                                    setBirthDate(e.currentTarget.value)
-                                }
                                 onFocus={() => {
                                     dateBirhtInput.current.type = "date";
                                 }}
@@ -117,6 +115,15 @@ export const SignUp = ({ onLoginPageClick }) => {
                                         dateBirhtInput.current.type = "text";
                                     }
                                 }}
+
+                                autoComplete="off"
+                                placeholder="Data de nascimento"
+                                value={birthDate}
+                                max={today.toISOString().split("T")[0]}
+                                onChange={(e) =>
+                                    setBirthDate(e.currentTarget.value)
+                                }
+                                
                             />
                             <S.CustomInput
                                 type="text"
