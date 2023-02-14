@@ -12,9 +12,9 @@ export const SignUp = ({ onLoginPageClick }) => {
     const [email, setEmail] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [password, setPassword] = useState("");
-    
+
     // const [inputDateType, setInputDateType] = useState("text");
-    const dateBirhtInput = useRef(null);
+    const dateBirthInput = useRef(null);
 
     const handdleSingupButtonClick = (e) => {
         e.preventDefault();
@@ -54,6 +54,10 @@ export const SignUp = ({ onLoginPageClick }) => {
 
         if (month < 0 || (month === 0 && today.getDate() <= bith.getDate())) {
             age--;
+        }
+
+        if (age < 0) {
+            return "Idade inválida";
         }
 
         return `${age} ${age > 1 ? "anos" : "ano"}`;
@@ -106,13 +110,13 @@ export const SignUp = ({ onLoginPageClick }) => {
                                 // onBlur={() => setInputDateType("text")}
 
                                 type="text"
-                                ref={dateBirhtInput}
+                                ref={dateBirthInput}
                                 onFocus={() => {
-                                    dateBirhtInput.current.type = "date";
+                                    dateBirthInput.current.type = "date";
                                 }}
                                 onBlur={() => {
                                     if (birthDate === "") {
-                                        dateBirhtInput.current.type = "text";
+                                        dateBirthInput.current.type = "text";
                                     }
                                 }}
 
@@ -123,7 +127,7 @@ export const SignUp = ({ onLoginPageClick }) => {
                                 onChange={(e) =>
                                     setBirthDate(e.currentTarget.value)
                                 }
-                                
+
                             />
                             <S.CustomInput
                                 type="text"
