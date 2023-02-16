@@ -8,10 +8,10 @@ import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 
 export const Navbar = () => {
-    const context = useContext(GlobalContext);
+    const { state, dispatch } = useContext(GlobalContext);
 
     const handleLogout = () => {
-        context.dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "login" });
+        dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "login" });
     };
 
     return (
@@ -28,10 +28,7 @@ export const Navbar = () => {
                         notification={item.notification}
                     />
                 ))}
-                <NavItem
-                    text="Perfil"
-                    image="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                />
+                <NavItem text="Perfil" image={state.profile.image} />
             </S.BoxNavbar>
             <S.BoxNavbar>
                 <NavItem text="Sair" icon="logout" onClick={handleLogout} />
