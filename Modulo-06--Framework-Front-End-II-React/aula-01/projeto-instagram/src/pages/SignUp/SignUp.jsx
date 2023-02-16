@@ -1,17 +1,24 @@
-import { useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import * as S from "../Login/style";
 
 import { Button } from "../../ui/Button";
 import { Text, TextLink } from "../../ui/Text";
 
 import { Logo } from "../../components/Logo";
+import { GlobalContext } from "../../context/GlobalContext";
 
-export const SignUp = ({ onLoginPageClick }) => {
+export const SignUp = () => {
     const [fullName, setFullname] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [password, setPassword] = useState("");
+
+    const context = useContext(GlobalContext);
+
+    const handleClickLoginPage = () => {
+        context.dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "login" });
+    };
 
     // const [inputDateType, setInputDateType] = useState("text");
     const dateBirthInput = useRef(null);
@@ -119,7 +126,6 @@ export const SignUp = ({ onLoginPageClick }) => {
                                         dateBirthInput.current.type = "text";
                                     }
                                 }}
-
                                 autoComplete="off"
                                 placeholder="Data de nascimento"
                                 value={birthDate}
@@ -127,7 +133,6 @@ export const SignUp = ({ onLoginPageClick }) => {
                                 onChange={(e) =>
                                     setBirthDate(e.currentTarget.value)
                                 }
-
                             />
                             <S.CustomInput
                                 type="text"
@@ -164,7 +169,7 @@ export const SignUp = ({ onLoginPageClick }) => {
                             <TextLink
                                 bold
                                 color="#4db5f9"
-                                onClick={onLoginPageClick}
+                                onClick={handleClickLoginPage}
                             >
                                 Conecte-se
                             </TextLink>

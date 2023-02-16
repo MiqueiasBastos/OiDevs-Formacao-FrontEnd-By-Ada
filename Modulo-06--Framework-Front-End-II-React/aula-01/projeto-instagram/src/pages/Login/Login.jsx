@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import * as S from "./style";
 
 import { Button } from "../../ui/Button";
@@ -6,10 +6,21 @@ import { Text, TextLink } from "../../ui/Text";
 
 import loginPhoneImage from "../../assets/login-phones.png";
 import { Logo } from "../../components/Logo";
+import { GlobalContext } from "../../context/GlobalContext";
 
-export const Login = ({ onLogin, onSignUpPageClick }) => {
+export const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const context = useContext(GlobalContext);
+
+    const handleLogin = () => {
+        context.dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "home" });
+    };
+
+    const handleClickSignUpPage = () => {
+        context.dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "signup" });
+    };
 
     return (
         <S.Wrapper>
@@ -25,7 +36,7 @@ export const Login = ({ onLogin, onSignUpPageClick }) => {
                         <S.CustomForm
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                onLogin();
+                                handleLogin();
                             }}
                         >
                             <S.CustomInput
@@ -72,9 +83,7 @@ export const Login = ({ onLogin, onSignUpPageClick }) => {
                             <TextLink
                                 bold
                                 color="#4db5f9"
-                                onClick={() => {
-                                    onSignUpPageClick();
-                                }}
+                                onClick={handleClickSignUpPage}
                             >
                                 Cadastre-se
                             </TextLink>

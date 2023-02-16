@@ -20,12 +20,12 @@ const ContentWrapper = styled.div`
     padding: 30px 20px;
 `;
 
-export const Home = ({ onLogout }) => {
+export const Home = () => {
     const [currentTab, setCurrentTab] = useState("posts");
     return (
         <Grid templateColumns="244px 1fr">
             <GridItem>
-                <Navbar onLogout={onLogout} />
+                <Navbar />
             </GridItem>
             <GridItem>
                 <ScrollView>

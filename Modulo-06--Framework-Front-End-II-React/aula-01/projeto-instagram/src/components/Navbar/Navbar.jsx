@@ -4,8 +4,16 @@ import { Logo } from "../Logo";
 import { itemsMenu } from "../../data";
 
 import * as S from "./style";
+import { useContext } from "react";
+import { GlobalContext } from "../../context/GlobalContext";
 
-export const Navbar = ({ onLogout }) => {
+export const Navbar = () => {
+    const context = useContext(GlobalContext);
+
+    const handleLogout = () => {
+        context.dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "login" });
+    };
+
     return (
         <S.NavbarWrapper>
             <S.BoxNavbar>
@@ -26,7 +34,7 @@ export const Navbar = ({ onLogout }) => {
                 />
             </S.BoxNavbar>
             <S.BoxNavbar>
-                <NavItem text="Sair" icon="logout" onClick={onLogout} />
+                <NavItem text="Sair" icon="logout" onClick={handleLogout} />
                 <NavItem text="Mais" icon="menu" />
             </S.BoxNavbar>
         </S.NavbarWrapper>
