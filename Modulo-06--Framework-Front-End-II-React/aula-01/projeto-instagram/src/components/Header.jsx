@@ -1,11 +1,12 @@
+import { useContext } from "react";
 import { Avatar } from "./Avatar";
 import { Button } from "../ui/Button";
 import { Text, TextLink } from "../ui/Text";
 import styled from "styled-components";
 
-import { profileData } from "../data";
 import { CounterLabel } from "./CounterLabel";
 import { Icon } from "./Icon";
+import { GlobalContext } from "../context/GlobalContext";
 
 const Wrapper = styled.div`
     display: flex;
@@ -60,54 +61,59 @@ const ProfileInfos = styled.div`
 `;
 
 export const Header = () => {
+    const context = useContext(GlobalContext);
+    const { state } = context;
+
     return (
         <Wrapper>
             <AvatarWrapper>
-                <Avatar image={profileData.imageProfile} size={150} />
+                <Avatar image={state.profile.imageProfile} size={150} />
             </AvatarWrapper>
             <Content>
                 <Infos>
-                    <Text size={20}>{profileData.user}</Text>
+                    <Text size={20}>{state.profile.user}</Text>
                     <ButtonsWrapper>
                         <Button icon="arrowDown">Seguindo</Button>
                         <Button>Enviar mensagem</Button>
                         <Button icon="follow" />
                     </ButtonsWrapper>
-                    <Button bgColor="transparent" marginNone><Icon name="options" /></Button>
+                    <Button bgColor="transparent" marginNone>
+                        <Icon name="options" />
+                    </Button>
                 </Infos>
                 <SocialInfos>
                     <CounterLabel
-                        number={profileData.publications}
+                        number={state.profile.publications}
                         label="publicações"
                     />
                     <CounterLabel
-                        number={profileData.followers}
+                        number={state.profile.followers}
                         label="seguidores"
                     />
                     <CounterLabel
-                        number={profileData.following}
+                        number={state.profile.following}
                         label="seguindo"
                     />
                 </SocialInfos>
                 <ProfileInfos>
                     <Text size={14} bold>
-                        {profileData.profileName}
+                        {state.profile.profileName}
                     </Text>
                     <Text size={14} color="#a8a8a8">
                         Educação
                     </Text>
-                    <Text size={14}>{profileData.biography}</Text>
+                    <Text size={14}>{state.profile.biography}</Text>
                     <TextLink size={14} color="#e0f1ff" bold>
-                        {profileData.website}
+                        {state.profile.website}
                     </TextLink>
                 </ProfileInfos>
                 <FollowWrapper>
                     <Text color="#a8a8a8" size={12} bold>
                         Seguido(a) por{" "}
                         <Text color="#FFF" size={12} bold>
-                            {profileData.followedBy.join(", ")}
+                            {state.profile.followedBy.join(", ")}
                         </Text>{" "}
-                        e outras {profileData.moreFollowers} pessoas
+                        e outras {state.profile.moreFollowers} pessoas
                     </Text>
                 </FollowWrapper>
             </Content>

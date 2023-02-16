@@ -1,4 +1,3 @@
-import profileImage from "./assets/profile.jpg";
 import highlightComunidade from "./assets/highlight_comunidade.jpg";
 import highlightDesafios from "./assets/highlight_desafios.jpg";
 import highlightFaculdades from "./assets/highlight_faculdades.jpg";
@@ -15,40 +14,25 @@ export const itemsMenu = [
     { id: 7, title: "Criar", icon: "create" },
 ];
 
-export const profileData = {
-    publications: 216,
-    followers: 44200,
-    following: 2,
-    user: "adatechbr",
-    profileName: "Ada Tech",
-    imageProfile: profileImage,
-    category: "Educação",
-    biography: "Ada. A Nova Educação.",
-    website: "beacons.ai/adatechbr",
-    followedBy: ["machado_bru", "CaioaSilva__", "fellipearb"],
-    moreFollowers: 2,
-};
-
 export const highlights = [
     {
-        title: 'Parceiros',
-        image: highlightParceiros
+        title: "Parceiros",
+        image: highlightParceiros,
     },
     {
-        title: 'Desafios',
-        image: highlightDesafios
+        title: "Desafios",
+        image: highlightDesafios,
     },
     {
-        title: 'Comunidade',
-        image: highlightComunidade
+        title: "Comunidade",
+        image: highlightComunidade,
     },
     {
-        title: 'Faculdade',
-        image: highlightFaculdades
+        title: "Faculdade",
+        image: highlightFaculdades,
     },
     {
-        title: 'Modelo Educacional',
-        image: highlightModeloEducacional
+        title: "Modelo Educacional",
+        image: highlightModeloEducacional,
     },
-
 ];
