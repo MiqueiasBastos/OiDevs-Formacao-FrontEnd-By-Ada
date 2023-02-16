@@ -15,6 +15,14 @@ export const Login = () => {
     const context = useContext(GlobalContext);
 
     const handleLogin = () => {
+        if (!username || !password) {
+            alert("Preencha o usuário e a senha!");
+            return;
+        }
+
+        context.dispatch({ type: "CHANGE_USERNAME", payload: username });
+        context.dispatch({ type: "CHANGE_IMAGE_PROFILE" });
+
         context.dispatch({ type: "CHANGE_CURRENT_PAGE", payload: "home" });
     };
 

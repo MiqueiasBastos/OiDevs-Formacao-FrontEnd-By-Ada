@@ -2,8 +2,8 @@ export const Logo = ({ size, color }) => {
     return (
         <svg
             aria-label="Instagram"
-            color={color || '#FFF'}
-            fill={color || '#FFF'}
+            color={color || "#FFF"}
+            fill={color || "#FFF"}
             height={size || 29}
             viewBox="32 4 113 32"
         >

@@ -1,6 +1,5 @@
 import styled from "styled-components";
-
-import { Icon } from "../Icon";
+import { Icon } from "../../Icon";
 
 export const WrapperList = styled.ul`
     display: flex;

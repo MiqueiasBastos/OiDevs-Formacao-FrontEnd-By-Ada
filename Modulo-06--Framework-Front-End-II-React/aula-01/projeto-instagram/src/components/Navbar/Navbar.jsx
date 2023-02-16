@@ -1,7 +1,7 @@
 import { NavItem } from "./NavItem";
 import { Logo } from "../Logo";
 
-import { itemsMenu } from "../../data";
+import { itemsMenu } from "./itemsMenu";
 
 import * as S from "./style";
 import { useContext } from "react";
