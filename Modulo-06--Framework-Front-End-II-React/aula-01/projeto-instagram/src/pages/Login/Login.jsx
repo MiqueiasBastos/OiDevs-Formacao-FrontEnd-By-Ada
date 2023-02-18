@@ -33,9 +33,9 @@ export const Login = () => {
     return (
         <S.Wrapper>
             <S.Content>
-                <S.Box>
+                <S.ImageContainer>
                     <img src={loginPhoneImage} alt="" />
-                </S.Box>
+                </S.ImageContainer>
                 <S.Box>
                     <S.ContentArea>
                         <S.LogoWrapper>

@@ -10,7 +10,9 @@ export const Content = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 762px;
+    width: 100%;
+    max-width: 762px;
+    min-width: 380px;
     gap: 32px;
 `;
 export const ContentArea = styled.div`
@@ -54,6 +56,11 @@ export const CustomInput = styled.input`
     }
 `;
 export const Box = styled.div``;
+export const ImageContainer = styled.div`
+    @media (max-width: 880px) {
+        display: none;
+    }
+`;
 export const Separator = styled.div`
     width: 100%;
     height: 1px;
@@ -62,4 +69,7 @@ export const Separator = styled.div`
 `;
 export const Footer = styled.div`
     margin: 30px 0;
+    width: 100%;
+    min-width: 380px;
+    text-align: center;
 `;
